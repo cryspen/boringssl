@@ -5683,7 +5683,7 @@ func addStateMachineCoverageTests(config stateMachineTestConfig) {
 			expectedError:        halfHelloRequestError,
 		})
 
-		// NPN on client and server; results in post-handshake message.
+		// NPN on client and server; results in post-ChangeCipherSpec message.
 		tests = append(tests, testCase{
 			name: "NPN-Client",
 			config: Config{
@@ -5711,6 +5711,73 @@ func addStateMachineCoverageTests(config stateMachineTestConfig) {
 			resumeSession: true,
 			expectations: connectionExpectations{
 				nextProto:     "bar",
+				nextProtoType: npn,
+			},
+		})
+
+		// The client may select no protocol after seeing the server list.
+		tests = append(tests, testCase{
+			name: "NPN-Client-ClientSelectEmpty",
+			config: Config{
+				MaxVersion: VersionTLS12,
+				NextProtos: []string{"foo"},
+			},
+			flags:         []string{"-select-empty-next-proto"},
+			resumeSession: true,
+			expectations: connectionExpectations{
+				noNextProto:   true,
+				nextProtoType: npn,
+			},
+		})
+		tests = append(tests, testCase{
+			testType: serverTest,
+			name:     "NPN-Server-ClientSelectEmpty",
+			config: Config{
+				MaxVersion:          VersionTLS12,
+				NextProtos:          []string{"no-match"},
+				NoFallbackNextProto: true,
+			},
+			flags: []string{
+				"-advertise-npn", "\x03foo\x03bar\x03baz",
+				"-expect-no-next-proto",
+			},
+			resumeSession: true,
+			expectations: connectionExpectations{
+				noNextProto:   true,
+				nextProtoType: npn,
+			},
+		})
+
+		// The server may negotiate NPN, despite offering no protocols. In this
+		// case, the server must still be prepared for the client to select a
+		// fallback protocol.
+		tests = append(tests, testCase{
+			name: "NPN-Client-ServerAdvertiseEmpty",
+			config: Config{
+				MaxVersion:               VersionTLS12,
+				NegotiateNPNWithNoProtos: true,
+			},
+			flags:         []string{"-select-next-proto", "foo"},
+			resumeSession: true,
+			expectations: connectionExpectations{
+				nextProto:     "foo",
+				nextProtoType: npn,
+			},
+		})
+		tests = append(tests, testCase{
+			testType: serverTest,
+			name:     "NPN-Server-ServerAdvertiseEmpty",
+			config: Config{
+				MaxVersion: VersionTLS12,
+				NextProtos: []string{"foo"},
+			},
+			flags: []string{
+				"-advertise-empty-npn",
+				"-expect-next-proto", "foo",
+			},
+			resumeSession: true,
+			expectations: connectionExpectations{
+				nextProto:     "foo",
 				nextProtoType: npn,
 			},
 		})
@@ -12060,8 +12127,7 @@ func addCurveTests() {
 		flags: []string{
 			"-curves", strconv.Itoa(int(CurveX25519Kyber768)),
 			"-curves", strconv.Itoa(int(CurveX25519)),
-			// Cannot expect Kyber until we have a Go implementation of it.
-			// "-expect-curve-id", strconv.Itoa(int(CurveX25519Kyber768)),
+			"-expect-curve-id", strconv.Itoa(int(CurveX25519Kyber768)),
 		},
 	})
 
@@ -16780,7 +16846,7 @@ func addEncryptedClientHelloTests() {
 		DNSNames:              []string{"secret.example"},
 		IsCA:                  true,
 		BasicConstraintsValid: true,
-	}, &ecdsaP256Key)
+	}, &rsa2048Key)
 	echPublicCertificate := generateSingleCertChain(&x509.Certificate{
 		SerialNumber: big.NewInt(57005),
 		Subject: pkix.Name{
@@ -16791,7 +16857,7 @@ func addEncryptedClientHelloTests() {
 		DNSNames:              []string{"public.example"},
 		IsCA:                  true,
 		BasicConstraintsValid: true,
-	}, &ecdsaP256Key)
+	}, &rsa2048Key)
 	echLongNameCertificate := generateSingleCertChain(&x509.Certificate{
 		SerialNumber: big.NewInt(57005),
 		Subject: pkix.Name{
@@ -17786,6 +17852,7 @@ write hs 4
 					AlwaysSendECHHelloRetryRequest: true,
 					ExpectMissingKeyShare:          true, // Check we triggered HRR.
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -17973,6 +18040,7 @@ write hs 4
 					ExpectServerName:      "secret.example",
 					AlwaysRejectEarlyData: true,
 				},
+				Credential: &echSecretCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18246,6 +18314,7 @@ write hs 4
 						extensionSupportedCurves,
 					},
 				},
+				Credential: &echSecretCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18298,6 +18367,7 @@ write hs 4
 						extensionSupportedVersions,
 					},
 				},
+				Credential: &echSecretCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18340,6 +18410,7 @@ write hs 4
 				Bugs: ProtocolBugs{
 					ExpectServerName: "public.example",
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18360,6 +18431,7 @@ write hs 4
 					ExpectServerName:      "public.example",
 					ExpectMissingKeyShare: true, // Check we triggered HRR.
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18378,6 +18450,7 @@ write hs 4
 				Bugs: ProtocolBugs{
 					ExpectServerName: "public.example",
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18397,6 +18470,7 @@ write hs 4
 					Bugs: ProtocolBugs{
 						ExpectServerName: "public.example",
 					},
+					Credential: &echPublicCertificate,
 				},
 				flags: []string{
 					"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18422,6 +18496,7 @@ write hs 4
 						ExpectFalseStart:          true,
 						AlertBeforeFalseStartTest: alertAccessDenied,
 					},
+					Credential: &echPublicCertificate,
 				},
 				flags: []string{
 					"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18458,6 +18533,7 @@ write hs 4
 					SendECHRetryConfigs: retryConfigs,
 					ExpectServerName:    "public.example",
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18479,6 +18555,7 @@ write hs 4
 				Bugs: ProtocolBugs{
 					ExpectServerName: "secret.example",
 				},
+				Credential: &echSecretCertificate,
 			},
 			resumeConfig: &Config{
 				MaxVersion:       VersionTLS13,
@@ -18487,6 +18564,7 @@ write hs 4
 					ExpectServerName:                    "public.example",
 					UseInnerSessionWithClientHelloOuter: true,
 				},
+				Credential: &echPublicCertificate,
 			},
 			resumeSession: true,
 			flags: []string{
@@ -18509,6 +18587,7 @@ write hs 4
 					Bugs: ProtocolBugs{
 						ExpectServerName: "secret.example",
 					},
+					Credential: &echSecretCertificate,
 				},
 				resumeConfig: &Config{
 					MinVersion:       VersionTLS12,
@@ -18522,6 +18601,7 @@ write hs 4
 						// resumed at TLS 1.2.
 						AcceptAnySession: true,
 					},
+					Credential: &echPublicCertificate,
 				},
 				resumeSession: true,
 				flags: []string{
@@ -18550,12 +18630,14 @@ write hs 4
 				Bugs: ProtocolBugs{
 					ExpectServerName: "secret.example",
 				},
+				Credential: &echSecretCertificate,
 			},
 			resumeConfig: &Config{
 				ServerECHConfigs: []ServerECHConfig{echConfig2},
 				Bugs: ProtocolBugs{
 					ExpectServerName: "public.example",
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18588,12 +18670,14 @@ write hs 4
 					Bugs: ProtocolBugs{
 						ExpectServerName: "secret.example",
 					},
+					Credential: &echSecretCertificate,
 				},
 				resumeConfig: &Config{
 					MaxVersion: VersionTLS12,
 					Bugs: ProtocolBugs{
 						ExpectServerName: "public.example",
 					},
+					Credential: &echPublicCertificate,
 				},
 				flags: []string{
 					"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18698,6 +18782,7 @@ write hs 4
 					MinVersion: VersionTLS13,
 					MaxVersion: VersionTLS13,
 					ClientAuth: RequireAnyClientCert,
+					Credential: &echPublicCertificate,
 				},
 				shimCertificate: &rsaCertificate,
 				flags: append([]string{
@@ -18715,6 +18800,7 @@ write hs 4
 						MinVersion: VersionTLS12,
 						MaxVersion: VersionTLS12,
 						ClientAuth: RequireAnyClientCert,
+						Credential: &echPublicCertificate,
 					},
 					shimCertificate: &rsaCertificate,
 					flags: append([]string{
@@ -18758,6 +18844,7 @@ write hs 4
 				Bugs: ProtocolBugs{
 					AlwaysNegotiateChannelID: true,
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-send-channel-id", channelIDKeyPath,
@@ -18778,6 +18865,7 @@ write hs 4
 					Bugs: ProtocolBugs{
 						AlwaysNegotiateChannelID: true,
 					},
+					Credential: &echPublicCertificate,
 				},
 				flags: []string{
 					"-send-channel-id", channelIDKeyPath,
@@ -18849,6 +18937,7 @@ write hs 4
 			config: Config{
 				MinVersion: VersionTLS13,
 				MaxVersion: VersionTLS13,
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-verify-peer",
@@ -18888,8 +18977,11 @@ write hs 4
 			name:     prefix + "ECH-Client-Reject-EarlyDataRejected-OverrideNameOnRetry",
 			config: Config{
 				ServerECHConfigs: []ServerECHConfig{echConfig},
+				Credential:       &echPublicCertificate,
 			},
-			resumeConfig: &Config{},
+			resumeConfig: &Config{
+				Credential: &echPublicCertificate,
+			},
 			flags: []string{
 				"-verify-peer",
 				"-use-custom-verify-callback",
@@ -20354,19 +20446,19 @@ func statusPrinter(doneChan chan *testresult.Results, statusChan chan statusMsg,
 					if *allowUnimplemented {
 						testOutput.AddSkip(msg.test.name)
 					} else {
-						testOutput.AddResult(msg.test.name, "SKIP")
+						testOutput.AddResult(msg.test.name, "SKIP", nil)
 					}
 				} else {
 					fmt.Printf("FAILED (%s)\n%s\n", msg.test.name, msg.err)
 					failed++
-					testOutput.AddResult(msg.test.name, "FAIL")
+					testOutput.AddResult(msg.test.name, "FAIL", msg.err)
 				}
 			} else {
 				if *pipe {
 					// Print each test instead of a status line.
 					fmt.Printf("PASSED (%s)\n", msg.test.name)
 				}
-				testOutput.AddResult(msg.test.name, "PASS")
+				testOutput.AddResult(msg.test.name, "PASS", nil)
 			}
 		}
 
