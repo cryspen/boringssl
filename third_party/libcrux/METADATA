@@ -6,8 +6,8 @@ third_party {
     type: GIT
     value: "https://github.com/cryspen/libcrux/"
   }
-  version: "d7ec04eea33dce81ec2f44d2b72edede2e5b147a"
-  last_upgrade_date { year: 2024 month: 4 day: 24 }
+  version: "cab8aad997a68bfca77f7aab127a120d363de5c3"
+  last_upgrade_date { year: 2024 month: 6 day: 14 }
 
   local_modifications: "Initial import"
 }
