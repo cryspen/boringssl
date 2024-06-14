@@ -95,9 +95,10 @@ class updateAction(argparse.Action):
                 )
         # Internal and intrinsics header
         copy_dir("internal", dst="include")
+        intrinsics_file = "libcrux_intrinsics_avx2.h"
         shutil.copyfile(
-            join_path(libcrux_path, "intrinsics", "libcrux_intrinsics_avx2.h"),
-            join_path(include_dst_path, "intrinsics", os.path.basename(file)),
+            join_path(libcrux_path, "intrinsics", intrinsics_file),
+            join_path(include_dst_path, "intrinsics", intrinsics_file),
         )
 
         # Source files

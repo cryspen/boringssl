@@ -369,6 +369,7 @@ crypto_sources = [
     "crypto/kyber/kyber.c",
     "crypto/lhash/lhash.c",
     "crypto/mem.c",
+    "crypto/mlkem/mlkem.c",
     "crypto/obj/obj.c",
     "crypto/obj/obj_xref.c",
     "crypto/pem/pem_all.c",
@@ -488,6 +489,8 @@ crypto_sources = [
     "crypto/x509/x_x509.c",
     "crypto/x509/x_x509a.c",
     "gen/crypto/err_data.c",
+    "third_party/libcrux/libcrux_core.c",
+    "third_party/libcrux/libcrux_mlkem768_portable.c",
 ]
 
 crypto_headers = [
@@ -543,6 +546,7 @@ crypto_headers = [
     "include/openssl/md4.h",
     "include/openssl/md5.h",
     "include/openssl/mem.h",
+    "include/openssl/mlkem.h",
     "include/openssl/nid.h",
     "include/openssl/obj.h",
     "include/openssl/obj_mac.h",
@@ -645,6 +649,14 @@ crypto_internal_headers = [
     "third_party/fiat/p256_32.h",
     "third_party/fiat/p256_64.h",
     "third_party/fiat/p256_64_msvc.h",
+    "third_party/libcrux/eurydice_glue.h",
+    "third_party/libcrux/internal/libcrux_core.h",
+    "third_party/libcrux/karamel/lowstar_endianness.h",
+    "third_party/libcrux/karamel/target.h",
+    "third_party/libcrux/libcrux_core.h",
+    "third_party/libcrux/libcrux_mlkem768_portable.h",
+    "third_party/libcrux/libcrux_mlkem_portable.h",
+    "third_party/libcrux/libcrux_sha3_portable.h",
 ]
 
 crypto_sources_asm = [
@@ -727,6 +739,7 @@ crypto_test_sources = [
     "crypto/keccak/keccak_test.cc",
     "crypto/kyber/kyber_test.cc",
     "crypto/lhash/lhash_test.cc",
+    "crypto/mlkem/mlkem_test.cc",
     "crypto/obj/obj_test.cc",
     "crypto/pem/pem_test.cc",
     "crypto/pkcs7/pkcs7_test.cc",
