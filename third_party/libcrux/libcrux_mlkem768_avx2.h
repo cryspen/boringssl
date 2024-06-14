@@ -20,53 +20,67 @@ extern "C" {
 
 typedef core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_SIMD256Vector;
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_zero(void);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___ZERO(
     void);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_from_i16_array(
     Eurydice_slice array);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___from_i16_array(
     Eurydice_slice array);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_arithmetic_add(
     core_core_arch_x86___m256i lhs, core_core_arch_x86___m256i rhs);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___add(
     core_core_arch_x86___m256i lhs, core_core_arch_x86___m256i *rhs);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_arithmetic_sub(
     core_core_arch_x86___m256i lhs, core_core_arch_x86___m256i rhs);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___sub(
     core_core_arch_x86___m256i lhs, core_core_arch_x86___m256i *rhs);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_arithmetic_multiply_by_constant(
     core_core_arch_x86___m256i vector, int16_t constant);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___multiply_by_constant(
     core_core_arch_x86___m256i v, int16_t c);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_arithmetic_bitwise_and_with_constant(
     core_core_arch_x86___m256i vector, int16_t constant);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___bitwise_and_with_constant(
     core_core_arch_x86___m256i vector, int16_t constant);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_arithmetic_cond_subtract_3329(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___cond_subtract_3329(
     core_core_arch_x86___m256i vector);
@@ -74,49 +88,61 @@ libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libc
 #define LIBCRUX_ML_KEM_VECTOR_AVX2_ARITHMETIC_BARRETT_MULTIPLIER \
   ((int16_t)20159)
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_arithmetic_barrett_reduce(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___barrett_reduce(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_arithmetic_montgomery_multiply_by_constant(
     core_core_arch_x86___m256i vector, int16_t constant);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___montgomery_multiply_by_constant(
     core_core_arch_x86___m256i vector, int16_t constant);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_compress_message_coefficient(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___compress_1(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_mulhi_mm256_epi32(
     core_core_arch_x86___m256i lhs, core_core_arch_x86___m256i rhs);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_arithmetic_montgomery_multiply_by_constants(
     core_core_arch_x86___m256i v, core_core_arch_x86___m256i c);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_ntt_ntt_layer_1_step(
     core_core_arch_x86___m256i vector, int16_t zeta0, int16_t zeta1,
     int16_t zeta2, int16_t zeta3);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___ntt_layer_1_step(
     core_core_arch_x86___m256i vector, int16_t zeta0, int16_t zeta1,
     int16_t zeta2, int16_t zeta3);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_ntt_ntt_layer_2_step(
     core_core_arch_x86___m256i vector, int16_t zeta0, int16_t zeta1);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___ntt_layer_2_step(
     core_core_arch_x86___m256i vector, int16_t zeta0, int16_t zeta1);
@@ -125,101 +151,138 @@ core_core_arch_x86___m128i
 libcrux_ml_kem_vector_avx2_arithmetic_montgomery_multiply_m128i_by_constants(
     core_core_arch_x86___m128i v, core_core_arch_x86___m128i c);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_ntt_ntt_layer_3_step(
     core_core_arch_x86___m256i vector, int16_t zeta);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___ntt_layer_3_step(
     core_core_arch_x86___m256i vector, int16_t zeta);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_ntt_inv_ntt_layer_1_step(
     core_core_arch_x86___m256i vector, int16_t zeta0, int16_t zeta1,
     int16_t zeta2, int16_t zeta3);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___inv_ntt_layer_1_step(
     core_core_arch_x86___m256i vector, int16_t zeta0, int16_t zeta1,
     int16_t zeta2, int16_t zeta3);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_ntt_inv_ntt_layer_2_step(
     core_core_arch_x86___m256i vector, int16_t zeta0, int16_t zeta1);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___inv_ntt_layer_2_step(
     core_core_arch_x86___m256i vector, int16_t zeta0, int16_t zeta1);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_ntt_inv_ntt_layer_3_step(
     core_core_arch_x86___m256i vector, int16_t zeta);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___inv_ntt_layer_3_step(
     core_core_arch_x86___m256i vector, int16_t zeta);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_arithmetic_montgomery_reduce_i32s(
     core_core_arch_x86___m256i v);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_ntt_ntt_multiply(
     core_core_arch_x86___m256i lhs, core_core_arch_x86___m256i rhs,
     int16_t zeta0, int16_t zeta1, int16_t zeta2, int16_t zeta3);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___ntt_multiply(
     core_core_arch_x86___m256i *lhs, core_core_arch_x86___m256i *rhs,
     int16_t zeta0, int16_t zeta1, int16_t zeta2, int16_t zeta3);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2_serialize_serialize_1(
     core_core_arch_x86___m256i vector, uint8_t ret[2U]);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___serialize_1(
     core_core_arch_x86___m256i vector, uint8_t ret[2U]);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_serialize_deserialize_1(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___deserialize_1(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2_serialize_serialize_4(
     core_core_arch_x86___m256i vector, uint8_t ret[8U]);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___serialize_4(
     core_core_arch_x86___m256i vector, uint8_t ret[8U]);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_serialize_deserialize_4(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___deserialize_4(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2_serialize_serialize_5(
     core_core_arch_x86___m256i vector, uint8_t ret[10U]);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___serialize_5(
     core_core_arch_x86___m256i vector, uint8_t ret[10U]);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_serialize_deserialize_5(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___deserialize_5(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2_serialize_serialize_10(
     core_core_arch_x86___m256i vector, uint8_t ret[20U]);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___serialize_10(
     core_core_arch_x86___m256i vector, uint8_t ret[20U]);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_serialize_deserialize_10(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___deserialize_10(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2_to_i16_array(core_core_arch_x86___m256i v,
                                              int16_t ret[16U]);
 
@@ -230,12 +293,15 @@ typedef struct libcrux_ml_kem_vector_avx2_portable_PortableVector_s {
 libcrux_ml_kem_vector_avx2_portable_PortableVector
 libcrux_ml_kem_vector_avx2_portable_from_i16_array(int16_t array[16U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2_portable_serialize_11(
     libcrux_ml_kem_vector_avx2_portable_PortableVector v, uint8_t ret[22U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2_serialize_serialize_11(
     core_core_arch_x86___m256i vector, uint8_t ret[22U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___serialize_11(
     core_core_arch_x86___m256i vector, uint8_t ret[22U]);
 
@@ -245,32 +311,43 @@ libcrux_ml_kem_vector_avx2_portable_zero(void);
 libcrux_ml_kem_vector_avx2_portable_PortableVector
 libcrux_ml_kem_vector_avx2_portable_deserialize_11(Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2_portable_to_i16_array(
     libcrux_ml_kem_vector_avx2_portable_PortableVector v, int16_t ret[16U]);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_serialize_deserialize_11(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___deserialize_11(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2_serialize_serialize_12(
     core_core_arch_x86___m256i vector, uint8_t ret[24U]);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 void libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___serialize_12(
     core_core_arch_x86___m256i vector, uint8_t ret[24U]);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i libcrux_ml_kem_vector_avx2_serialize_deserialize_12(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___deserialize_12(
     Eurydice_slice bytes);
 
+__attribute__((target("avx2")))
 size_t libcrux_ml_kem_vector_avx2_sampling_rejection_sample(
     Eurydice_slice input, Eurydice_slice output);
 
+__attribute__((target("avx2")))
 size_t
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___rej_sample(
     Eurydice_slice input, Eurydice_slice output);
@@ -280,38 +357,52 @@ typedef struct
   core_core_arch_x86___m256i coefficients[16U];
 } libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector;
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vector__TraitClause_0___ZERO__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     void);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_ind_cpa_deserialize_then_decompress_u_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t_1088size_t_10size_t(
     size_t _);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_decompress_ciphertext_coefficient___10int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___decompress_ciphertext_coefficient___10int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_then_decompress_10__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     Eurydice_slice serialized);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_decompress_ciphertext_coefficient___11int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___decompress_ciphertext_coefficient___11int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_then_decompress_11__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     Eurydice_slice serialized);
 
+__attribute__((target("avx2")))
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_then_decompress_ring_element_u__libcrux_ml_kem_vector_avx2_SIMD256Vector_10size_t(
     Eurydice_slice serialized);
@@ -322,92 +413,112 @@ typedef struct
   core_core_arch_x86___m256i snd;
 } K___libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_vector_avx2_SIMD256Vector;
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_traits_montgomery_multiply_fe__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     core_core_arch_x86___m256i v, int16_t fer);
 
+__attribute__((target("avx2")))
 K___libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_ntt_ntt_layer_int_vec_step__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     core_core_arch_x86___m256i a, core_core_arch_x86___m256i b, int16_t zeta_r);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ntt_ntt_at_layer_4_plus__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     size_t *zeta_i,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     size_t layer, size_t _initial_coefficient_bound);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ntt_ntt_at_layer_3__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     size_t *zeta_i,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     size_t _layer, size_t _initial_coefficient_bound);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ntt_ntt_at_layer_2__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     size_t *zeta_i,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     size_t _layer, size_t _initial_coefficient_bound);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ntt_ntt_at_layer_1__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     size_t *zeta_i,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     size_t _layer, size_t _initial_coefficient_bound);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vector__TraitClause_0___poly_barrett_reduce__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *self);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ntt_ntt_vector_u__libcrux_ml_kem_vector_avx2_SIMD256Vector_10size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cpa_deserialize_then_decompress_u__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t_1088size_t_10size_t(
     uint8_t *ciphertext,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         ret[3U]);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_decompress_ciphertext_coefficient___4int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___decompress_ciphertext_coefficient___4int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_then_decompress_4__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     Eurydice_slice serialized);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_decompress_ciphertext_coefficient___5int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___decompress_ciphertext_coefficient___5int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_then_decompress_5__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     Eurydice_slice serialized);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_then_decompress_ring_element_v__libcrux_ml_kem_vector_avx2_SIMD256Vector_4size_t(
     Eurydice_slice serialized);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_ind_cpa_deserialize_secret_key_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     size_t _);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_to_uncompressed_ring_element__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     Eurydice_slice serialized);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cpa_deserialize_secret_key__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     Eurydice_slice secret_key,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         ret[3U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vector__TraitClause_0___ntt_multiply__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
@@ -415,44 +526,52 @@ libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vec
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *rhs);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vector__TraitClause_0___add_to_ring_element__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *self,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *rhs);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_invert_ntt_invert_ntt_at_layer_1__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     size_t *zeta_i,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     size_t _layer);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_invert_ntt_invert_ntt_at_layer_2__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     size_t *zeta_i,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     size_t _layer);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_invert_ntt_invert_ntt_at_layer_3__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     size_t *zeta_i,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     size_t _layer);
 
+__attribute__((target("avx2")))
 K___libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_invert_ntt_inv_ntt_layer_int_vec_step_reduce__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     core_core_arch_x86___m256i a, core_core_arch_x86___m256i b, int16_t zeta_r);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_invert_ntt_invert_ntt_at_layer_4_plus__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     size_t *zeta_i,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     size_t layer);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_invert_ntt_invert_ntt_montgomery__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vector__TraitClause_0___subtract_reduce__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
@@ -460,6 +579,7 @@ libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vec
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         b);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_matrix_compute_message__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
@@ -469,49 +589,61 @@ libcrux_ml_kem_matrix_compute_message__libcrux_ml_kem_vector_avx2_SIMD256Vector_
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *u_as_ntt);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_arithmetic_shift_right___15int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___shift_right___15int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_traits_to_unsigned_representative__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     core_core_arch_x86___m256i a);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_compress_then_serialize_message__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         re,
     uint8_t ret[32U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cpa_decrypt__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t_1088size_t_960size_t_10size_t_4size_t(
     Eurydice_slice secret_key, uint8_t *ciphertext, uint8_t ret[32U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_hash_functions_avx2___libcrux_ml_kem__hash_functions__Hash_K__for_libcrux_ml_kem__hash_functions__avx2__Simd256Hash___G___3size_t(
     Eurydice_slice input, uint8_t ret[64U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_hash_functions_avx2___libcrux_ml_kem__hash_functions__Hash_K__for_libcrux_ml_kem__hash_functions__avx2__Simd256Hash___PRF___3size_t_32size_t(
     Eurydice_slice input, uint8_t ret[32U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_ring_elements_reduced_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_1152size_t_3size_t(
     size_t _i);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_to_reduced_ring_element__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     Eurydice_slice serialized);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_deserialize_ring_elements_reduced__libcrux_ml_kem_vector_avx2_SIMD256Vector_1152size_t_3size_t(
     Eurydice_slice public_key,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         ret[3U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_matrix_sample_matrix_A_closure_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t(
     size_t _j);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_matrix_sample_matrix_A_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t(
     size_t _i,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
@@ -520,17 +652,21 @@ void libcrux_ml_kem_matrix_sample_matrix_A_closure__libcrux_ml_kem_vector_avx2_S
 typedef libcrux_sha3_avx2_x4_incremental_KeccakState4
     libcrux_ml_kem_hash_functions_avx2_Simd256Hash;
 
+__attribute__((target("avx2")))
 libcrux_sha3_avx2_x4_incremental_KeccakState4
 libcrux_ml_kem_hash_functions_avx2___libcrux_ml_kem__hash_functions__Hash_K__for_libcrux_ml_kem__hash_functions__avx2__Simd256Hash___shake128_init_absorb___3size_t(
     uint8_t input[3U][34U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_hash_functions_avx2___libcrux_ml_kem__hash_functions__Hash_K__for_libcrux_ml_kem__hash_functions__avx2__Simd256Hash___shake128_squeeze_three_blocks___3size_t(
     libcrux_sha3_avx2_x4_incremental_KeccakState4 *self, uint8_t ret[3U][504U]);
 
+__attribute__((target("avx2")))
 bool libcrux_ml_kem_sampling_sample_from_uniform_distribution_next__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t_504size_t(
     uint8_t randomness[3U][504U], size_t *sampled_coefficients,
     int16_t (*out)[272U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_hash_functions_avx2___libcrux_ml_kem__hash_functions__Hash_K__for_libcrux_ml_kem__hash_functions__avx2__Simd256Hash___shake128_squeeze_block___3size_t(
     libcrux_sha3_avx2_x4_incremental_KeccakState4 *self, uint8_t ret[3U][168U]);
 
@@ -538,19 +674,23 @@ bool libcrux_ml_kem_sampling_sample_from_uniform_distribution_next__libcrux_ml_k
     uint8_t randomness[3U][168U], size_t *sampled_coefficients,
     int16_t (*out)[272U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vector__TraitClause_0___from_i16_array__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     Eurydice_slice a);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_sampling_sample_from_xof_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t(
     int16_t s[272U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_sampling_sample_from_xof__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t(
     uint8_t seeds[3U][34U],
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         ret[3U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_matrix_sample_matrix_A__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t(
     uint8_t seed[34U], bool transpose,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
@@ -563,30 +703,37 @@ typedef struct
   uint8_t snd;
 } K___libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t__uint8_t;
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_ind_cpa_sample_vector_cbd_then_ntt_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_2size_t_128size_t(
     size_t _i);
 
+__attribute__((target("avx2")))
 void
     libcrux_ml_kem_hash_functions_avx2___libcrux_ml_kem__hash_functions__Hash_K__for_libcrux_ml_kem__hash_functions__avx2__Simd256Hash___PRFxN___3size_t_128size_t(
         uint8_t (*input)[33U], uint8_t ret[3U][128U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_sampling_sample_from_binomial_distribution_2__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     Eurydice_slice randomness);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_sampling_sample_from_binomial_distribution_3__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     Eurydice_slice randomness);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_sampling_sample_from_binomial_distribution__libcrux_ml_kem_vector_avx2_SIMD256Vector_2size_t(
     Eurydice_slice randomness);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ntt_ntt_at_layer_7__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ntt_ntt_binomially_sampled_ring_element__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re);
@@ -595,6 +742,7 @@ K___libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_
 libcrux_ml_kem_ind_cpa_sample_vector_cbd_then_ntt__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_2size_t_128size_t(
     uint8_t prf_input[33U], uint8_t domain_separator);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_ind_cpa_sample_ring_element_cbd_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_128size_t_2size_t(
     size_t _i);
@@ -603,19 +751,23 @@ K___libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_
 libcrux_ml_kem_ind_cpa_sample_ring_element_cbd__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_128size_t_2size_t(
     uint8_t prf_input[33U], uint8_t domain_separator);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_hash_functions_avx2___libcrux_ml_kem__hash_functions__Hash_K__for_libcrux_ml_kem__hash_functions__avx2__Simd256Hash___PRF___3size_t_128size_t(
     Eurydice_slice input, uint8_t ret[128U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_matrix_compute_vector_u_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     size_t _i);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vector__TraitClause_0___add_error_reduce__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *self,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *error);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_matrix_compute_vector_u__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector (
         *a_as_ntt)[3U],
@@ -626,14 +778,17 @@ void libcrux_ml_kem_matrix_compute_vector_u__libcrux_ml_kem_vector_avx2_SIMD256V
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         ret[3U]);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_traits_decompress_1__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     core_core_arch_x86___m256i v);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_then_decompress_message__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     uint8_t serialized[32U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vector__TraitClause_0___add_message_error_reduce__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
@@ -643,6 +798,7 @@ libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vec
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         result);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_matrix_compute_ring_element_v__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
@@ -654,121 +810,148 @@ libcrux_ml_kem_matrix_compute_ring_element_v__libcrux_ml_kem_vector_avx2_SIMD256
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *message);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_compress_ciphertext_coefficient___10int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___compress___10int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_compress_then_serialize_10__libcrux_ml_kem_vector_avx2_SIMD256Vector_320size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     uint8_t ret[320U]);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_compress_ciphertext_coefficient___11int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___compress___11int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_compress_then_serialize_11__libcrux_ml_kem_vector_avx2_SIMD256Vector_320size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     uint8_t ret[320U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_compress_then_serialize_ring_element_u__libcrux_ml_kem_vector_avx2_SIMD256Vector_10size_t_320size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     uint8_t ret[320U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cpa_compress_then_serialize_u__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t_960size_t_10size_t_320size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         input[3U],
     Eurydice_slice out);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_compress_ciphertext_coefficient___4int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___compress___4int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_compress_then_serialize_4__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         re,
     Eurydice_slice serialized);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2_compress_compress_ciphertext_coefficient___5int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___libcrux_ml_kem__vector__traits__Operations_for_libcrux_ml_kem__vector__avx2__SIMD256Vector___compress___5int32_t(
     core_core_arch_x86___m256i vector);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_compress_then_serialize_5__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         re,
     Eurydice_slice serialized);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_compress_then_serialize_ring_element_v__libcrux_ml_kem_vector_avx2_SIMD256Vector_4size_t_128size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         re,
     Eurydice_slice out);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cpa_encrypt__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_1088size_t_1152size_t_960size_t_128size_t_10size_t_4size_t_320size_t_2size_t_128size_t_2size_t_128size_t(
     Eurydice_slice public_key, uint8_t message[32U], Eurydice_slice randomness,
     uint8_t ret[1088U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cca_decapsulate__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_2400size_t_1152size_t_1184size_t_1088size_t_1152size_t_960size_t_128size_t_10size_t_4size_t_320size_t_2size_t_128size_t_2size_t_128size_t_1120size_t(
     libcrux_ml_kem_types_MlKemPrivateKey____2400size_t *private_key,
     libcrux_ml_kem_mlkem768_MlKem768Ciphertext *ciphertext, uint8_t ret[32U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cca_instantiations_avx2_decapsulate___3size_t_2400size_t_1152size_t_1184size_t_1088size_t_1152size_t_960size_t_128size_t_10size_t_4size_t_320size_t_2size_t_128size_t_2size_t_128size_t_1120size_t(
     libcrux_ml_kem_types_MlKemPrivateKey____2400size_t *private_key,
     libcrux_ml_kem_mlkem768_MlKem768Ciphertext *ciphertext, uint8_t ret[32U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_mlkem768_avx2_decapsulate(
     libcrux_ml_kem_types_MlKemPrivateKey____2400size_t *private_key,
     libcrux_ml_kem_mlkem768_MlKem768Ciphertext *ciphertext, uint8_t ret[32U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_hash_functions_avx2___libcrux_ml_kem__hash_functions__Hash_K__for_libcrux_ml_kem__hash_functions__avx2__Simd256Hash___H___3size_t(
     Eurydice_slice input, uint8_t ret[32U]);
 
+__attribute__((target("avx2")))
 K___libcrux_ml_kem_types_MlKemCiphertext___1088size_t___uint8_t_32size_t_
 libcrux_ml_kem_ind_cca_encapsulate__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_1088size_t_1184size_t_1152size_t_960size_t_128size_t_10size_t_4size_t_320size_t_2size_t_128size_t_2size_t_128size_t(
     libcrux_ml_kem_types_MlKemPublicKey____1184size_t *public_key,
     uint8_t randomness[32U]);
 
+__attribute__((target("avx2")))
 K___libcrux_ml_kem_types_MlKemCiphertext___1088size_t___uint8_t_32size_t_
 libcrux_ml_kem_ind_cca_instantiations_avx2_encapsulate___3size_t_1088size_t_1184size_t_1152size_t_960size_t_128size_t_10size_t_4size_t_320size_t_2size_t_128size_t_2size_t_128size_t(
     libcrux_ml_kem_types_MlKemPublicKey____1184size_t *public_key,
     uint8_t randomness[32U]);
 
+__attribute__((target("avx2")))
 K___libcrux_ml_kem_types_MlKemCiphertext___1088size_t___uint8_t_32size_t_
 libcrux_ml_kem_mlkem768_avx2_encapsulate(
     libcrux_ml_kem_types_MlKemPublicKey____1184size_t *public_key,
     uint8_t randomness[32U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_matrix_compute_As_plus_e_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     size_t _i);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_traits_to_standard_domain__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     core_core_arch_x86___m256i v);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_polynomial__libcrux_ml_kem__polynomial__PolynomialRingElement_Vector__TraitClause_0___add_standard_error_reduce__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *self,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *error);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_matrix_compute_As_plus_e__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector (
         *matrix_A)[3U],
@@ -779,63 +962,78 @@ void libcrux_ml_kem_matrix_compute_As_plus_e__libcrux_ml_kem_vector_avx2_SIMD256
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         ret[3U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_serialize_uncompressed_ring_element__libcrux_ml_kem_vector_avx2_SIMD256Vector(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         *re,
     uint8_t ret[384U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cpa_serialize_secret_key__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t_1152size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         key[3U],
     uint8_t ret[1152U]);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cpa_serialize_public_key__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t_1152size_t_1184size_t(
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         t_as_ntt[3U],
     Eurydice_slice seed_for_a, uint8_t ret[1184U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_utils_extraction_helper_Keypair768
 libcrux_ml_kem_ind_cpa_generate_keypair__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_1152size_t_1184size_t_1152size_t_2size_t_128size_t(
     Eurydice_slice key_generation_seed);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_ind_cca_serialize_kem_secret_key__libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_2400size_t(
     Eurydice_slice private_key, Eurydice_slice public_key,
     Eurydice_slice implicit_rejection_value, uint8_t ret[2400U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_mlkem768_MlKem768KeyPair
 libcrux_ml_kem_ind_cca_generate_keypair__libcrux_ml_kem_vector_avx2_SIMD256Vector_libcrux_ml_kem_hash_functions_avx2_Simd256Hash_3size_t_1152size_t_2400size_t_1184size_t_1152size_t_2size_t_128size_t(
     uint8_t randomness[64U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_mlkem768_MlKem768KeyPair
 libcrux_ml_kem_ind_cca_instantiations_avx2_generate_keypair___3size_t_1152size_t_2400size_t_1184size_t_1152size_t_2size_t_128size_t(
     uint8_t randomness[64U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_mlkem768_MlKem768KeyPair
 libcrux_ml_kem_mlkem768_avx2_generate_key_pair(uint8_t randomness[64U]);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
 libcrux_ml_kem_serialize_deserialize_ring_elements_reduced_closure__libcrux_ml_kem_vector_avx2_SIMD256Vector_1184size_t_3size_t(
     size_t _i);
 
+__attribute__((target("avx2")))
 void libcrux_ml_kem_serialize_deserialize_ring_elements_reduced__libcrux_ml_kem_vector_avx2_SIMD256Vector_1184size_t_3size_t(
     Eurydice_slice public_key,
     libcrux_ml_kem_polynomial_PolynomialRingElement__libcrux_ml_kem_vector_avx2_SIMD256Vector
         ret[3U]);
 
+__attribute__((target("avx2")))
 bool libcrux_ml_kem_ind_cca_validate_public_key__libcrux_ml_kem_vector_avx2_SIMD256Vector_3size_t_1152size_t_1184size_t(
     uint8_t *public_key);
 
+__attribute__((target("avx2")))
 bool libcrux_ml_kem_ind_cca_instantiations_avx2_validate_public_key___3size_t_1152size_t_1184size_t(
     uint8_t *public_key);
 
+__attribute__((target("avx2")))
 core_option_Option__libcrux_ml_kem_types_MlKemPublicKey___1184size_t__
 libcrux_ml_kem_mlkem768_avx2_validate_public_key(
     libcrux_ml_kem_types_MlKemPublicKey____1184size_t public_key);
 
+__attribute__((target("avx2")))
 libcrux_ml_kem_vector_avx2_portable_PortableVector
 libcrux_ml_kem_vector_avx2_portable___core__clone__Clone_for_libcrux_ml_kem__vector__avx2__portable__PortableVector___clone(
     libcrux_ml_kem_vector_avx2_portable_PortableVector *self);
 
+__attribute__((target("avx2")))
 core_core_arch_x86___m256i
 libcrux_ml_kem_vector_avx2___core__clone__Clone_for_libcrux_ml_kem__vector__avx2__SIMD256Vector__1__clone(
     core_core_arch_x86___m256i *self);
