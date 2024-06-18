@@ -489,10 +489,6 @@ crypto_sources = [
     "crypto/x509/x_x509.c",
     "crypto/x509/x_x509a.c",
     "gen/crypto/err_data.c",
-    "third_party/libcrux/libcrux_core.c",
-    "third_party/libcrux/libcrux_mlkem768_avx2.c",
-    "third_party/libcrux/libcrux_mlkem768_portable.c",
-    "third_party/libcrux/libcrux_sha3_avx2.c",
 ]
 
 crypto_headers = [
