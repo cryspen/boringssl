@@ -676,10 +676,10 @@ libcrux_ml_kem_vector_avx2_serialize_deserialize_1(Eurydice_slice bytes) {
       libcrux_intrinsics_avx2_mm256_set_epi16(
           (int16_t)1 << 8U, (int16_t)1 << 9U, (int16_t)1 << 10U,
           (int16_t)1 << 11U, (int16_t)1 << 12U, (int16_t)1 << 13U,
-          (int16_t)1 << 14U, (int16_t)1 << 15U, (int16_t)1 << 8U,
+          (int16_t)1 << 14U, -32768, (int16_t)1 << 8U,
           (int16_t)1 << 9U, (int16_t)1 << 10U, (int16_t)1 << 11U,
           (int16_t)1 << 12U, (int16_t)1 << 13U, (int16_t)1 << 14U,
-          (int16_t)1 << 15U);
+          -32768);
   core_core_arch_x86___m256i coefficients_in_msb =
       libcrux_intrinsics_avx2_mm256_mullo_epi16(coefficients, shift_lsb_to_msb);
   return libcrux_intrinsics_avx2_mm256_srli_epi16(
