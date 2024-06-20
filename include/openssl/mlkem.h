@@ -21,8 +21,6 @@ void Libcrux_Kyber768_Encapsulate(uint8_t *ct, uint8_t *ss, uint8_t (*pk)[1184],
 void Libcrux_Kyber768_Decapsulate(uint8_t ss[32U], uint8_t (*ct)[1088U],
                                   uint8_t (*sk)[2400U]);
 
-void Libcrux_Sha3_256(uint8_t *input, size_t len, uint8_t (*ret)[32]);
-
 #if defined(__cplusplus)
 }
 #endif
