@@ -16,17 +16,17 @@ TEST(MLKEM768Test, ConsistencyTest) {
   uint8_t publicKey[MLKEM768_PUBLICKEYBYTES];
   uint8_t secretKey[MLKEM768_SECRETKEYBYTES];
 
-  Libcrux_Kyber768_GenerateKeyPair(publicKey, secretKey, randomness);
+  Libcrux_Mlkem768_GenerateKeyPair(publicKey, secretKey, randomness);
 
   uint8_t ciphertext[MLKEM768_CIPHERTEXTBYTES];
   uint8_t sharedSecret[MLKEM768_SHAREDSECRETBYTES];
 
   uint8_t encap_randomness[64] = {0x38};
-  Libcrux_Kyber768_Encapsulate(ciphertext, sharedSecret, &publicKey,
+  Libcrux_Mlkem768_Encapsulate(ciphertext, sharedSecret, &publicKey,
                                encap_randomness);
 
   uint8_t sharedSecret2[MLKEM768_SHAREDSECRETBYTES];
-  Libcrux_Kyber768_Decapsulate(sharedSecret2, &ciphertext, &secretKey);
+  Libcrux_Mlkem768_Decapsulate(sharedSecret2, &ciphertext, &secretKey);
 
   EXPECT_EQ(0, memcmp(sharedSecret, sharedSecret2, MLKEM768_SHAREDSECRETBYTES));
 }
@@ -49,7 +49,7 @@ static void MlkemNistKatFileTest(FileTest *t) {
   uint8_t publicKey[MLKEM768_PUBLICKEYBYTES];
   uint8_t secretKey[MLKEM768_SECRETKEYBYTES];
 
-  Libcrux_Kyber768_GenerateKeyPair(publicKey, secretKey,
+  Libcrux_Mlkem768_GenerateKeyPair(publicKey, secretKey,
                                    key_generation_seed.data());
 
 
@@ -65,7 +65,7 @@ static void MlkemNistKatFileTest(FileTest *t) {
 
   uint8_t ciphertext[MLKEM768_CIPHERTEXTBYTES];
   uint8_t sharedSecret[MLKEM768_SHAREDSECRETBYTES];
-  Libcrux_Kyber768_Encapsulate(ciphertext, sharedSecret, &publicKey,
+  Libcrux_Mlkem768_Encapsulate(ciphertext, sharedSecret, &publicKey,
                                encapsulation_seed.data());
   uint8_t ct_hash[32];
   BORINGSSL_keccak(ct_hash, sizeof(ct_hash), ciphertext, sizeof(ciphertext),
@@ -75,7 +75,7 @@ static void MlkemNistKatFileTest(FileTest *t) {
                       MLKEM768_SHAREDSECRETBYTES));
 
   uint8_t sharedSecret2[MLKEM768_SHAREDSECRETBYTES];
-  Libcrux_Kyber768_Decapsulate(sharedSecret2, &ciphertext, &secretKey);
+  Libcrux_Mlkem768_Decapsulate(sharedSecret2, &ciphertext, &secretKey);
 
   EXPECT_EQ(0, memcmp(sharedSecret, sharedSecret2, MLKEM768_SHAREDSECRETBYTES));
 }
@@ -95,7 +95,7 @@ static void MlkemWycheproofKeygenFileTest(FileTest *t) {
   uint8_t publicKey[MLKEM768_PUBLICKEYBYTES];
   uint8_t secretKey[MLKEM768_SECRETKEYBYTES];
 
-  Libcrux_Kyber768_GenerateKeyPair(publicKey, secretKey, entropy.data());
+  Libcrux_Mlkem768_GenerateKeyPair(publicKey, secretKey, entropy.data());
 
   EXPECT_EQ(0, memcmp(publicKey, expected_public_key.data(),
                       MLKEM768_PUBLICKEYBYTES));
@@ -123,7 +123,7 @@ static void MlkemWycheproofEncapsFileTest(FileTest *t) {
     // Only passing tests here.
     uint8_t ciphertext[MLKEM768_CIPHERTEXTBYTES];
     uint8_t sharedSecret[MLKEM768_SHAREDSECRETBYTES];
-    Libcrux_Kyber768_Encapsulate(
+    Libcrux_Mlkem768_Encapsulate(
         ciphertext, sharedSecret,
         reinterpret_cast<uint8_t(*)[MLKEM768_PUBLICKEYBYTES]>(
             public_key.data()),
@@ -134,7 +134,10 @@ static void MlkemWycheproofEncapsFileTest(FileTest *t) {
     EXPECT_EQ(0, memcmp(sharedSecret, expected_shared_secret.data(),
                         MLKEM768_SHAREDSECRETBYTES));
   } else {
-    // TODO: Failing tests | validate the public key only
+    uint8_t pk[MLKEM768_PUBLICKEYBYTES];
+    memcpy(pk, public_key.data(), MLKEM768_PUBLICKEYBYTES);
+    auto valid = Libcrux_Mlkem768_ValidatePublicKey(pk);
+    EXPECT_TRUE(!valid || public_key.size() != MLKEM768_PUBLICKEYBYTES);
   }
 }
 
@@ -157,7 +160,7 @@ static void MlkemWycheproofDecapsFileTest(FileTest *t) {
   if (expected_result.compare("pass") == 0) {
     // Only passing tests here.
     uint8_t sharedSecret[MLKEM768_SHAREDSECRETBYTES];
-    Libcrux_Kyber768_Decapsulate(
+    Libcrux_Mlkem768_Decapsulate(
         sharedSecret,
         reinterpret_cast<uint8_t(*)[MLKEM768_CIPHERTEXTBYTES]>(
             ciphertext.data()),
