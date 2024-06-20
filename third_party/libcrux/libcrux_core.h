@@ -39,7 +39,7 @@ static inline uint32_t core_num__u8_6__count_ones(uint8_t x0);
 
 static inline uint8_t core_num__u8_6__wrapping_sub(uint8_t x0, uint8_t x1);
 
-static inline uint8_t libcrux_ml_kem_constant_time_ops_is_non_zero(
+KRML_NOINLINE static uint8_t libcrux_ml_kem_constant_time_ops_is_non_zero(
     uint8_t value) {
   uint16_t value0 = (uint16_t)value;
   uint16_t uu____0 = value0;
@@ -53,7 +53,7 @@ static inline uint8_t libcrux_ml_kem_constant_time_ops_is_non_zero(
 
 #define LIBCRUX_ML_KEM_CONSTANTS_SHARED_SECRET_SIZE ((size_t)32U)
 
-static inline void
+KRML_NOINLINE static void
 libcrux_ml_kem_constant_time_ops_select_shared_secret_in_constant_time(
     Eurydice_slice lhs, Eurydice_slice rhs, uint8_t selector,
     uint8_t ret[32U]) {
@@ -249,7 +249,7 @@ libcrux_ml_kem_types__libcrux_ml_kem__types__MlKemPublicKey_SIZE__18__as_slice__
   return self->value;
 }
 
-static inline uint8_t
+KRML_NOINLINE static uint8_t
 libcrux_ml_kem_constant_time_ops_compare_ciphertexts_in_constant_time___1088size_t(
     Eurydice_slice lhs, Eurydice_slice rhs) {
   uint8_t r = 0U;
