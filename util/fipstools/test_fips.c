@@ -48,7 +48,16 @@ static void hexdump(const void *a, size_t len) {
 }
 
 int main(int argc, char **argv) {
-  CRYPTO_library_init();
+  // Ensure that the output is line-buffered rather than fully buffered. When
+  // some of the tests fail, some of the output can otherwise be lost.
+  setvbuf(stdout, NULL, _IOLBF, 0);
+  setvbuf(stderr, NULL, _IOLBF, 0);
+
+  if (!FIPS_mode()) {
+    printf("Module not in FIPS mode\n");
+    goto err;
+  }
+  printf("Module is in FIPS mode\n");
 
   const uint32_t module_version = FIPS_version();
   if (module_version == 0) {
@@ -299,9 +308,9 @@ int main(int argc, char **argv) {
   static const uint8_t kNotValidX926[] = {1,2,3,4,5,6};
   if (!EC_KEY_oct2key(ec_key, kNotValidX926, sizeof(kNotValidX926),
                       /*ctx=*/NULL)) {
-    printf("Error while parsing invalid ECDSA public key");
+    printf("Error while parsing invalid ECDSA public key\n");
   } else {
-    printf("Unexpected success while parsing invalid ECDSA public key");
+    printf("Unexpected success while parsing invalid ECDSA public key\n");
     goto err;
   }
   EC_KEY_free(ec_key);

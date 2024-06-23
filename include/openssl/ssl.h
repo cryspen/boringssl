@@ -1205,6 +1205,11 @@ OPENSSL_EXPORT int SSL_set_ocsp_response(SSL *ssl,
 #define SSL_SIGN_RSA_PSS_RSAE_SHA512 0x0806
 #define SSL_SIGN_ED25519 0x0807
 
+// SSL_SIGN_RSA_PKCS1_SHA256_LEGACY is a backport of RSASSA-PKCS1-v1_5 with
+// SHA-256 to TLS 1.3. It is disabled by default and only defined for client
+// certificates.
+#define SSL_SIGN_RSA_PKCS1_SHA256_LEGACY 0x0420
+
 // SSL_SIGN_RSA_PKCS1_MD5_SHA1 is an internal signature algorithm used to
 // specify raw RSASSA-PKCS1-v1_5 with an MD5/SHA-1 concatenation, as used in TLS
 // before TLS 1.2.
@@ -4859,7 +4864,7 @@ OPENSSL_EXPORT void SSL_set_check_ecdsa_curve(SSL *ssl, int enable);
 
 // Deprecated functions.
 
-// SSL_library_init calls |CRYPTO_library_init| and returns one.
+// SSL_library_init returns one.
 OPENSSL_EXPORT int SSL_library_init(void);
 
 // SSL_CIPHER_description writes a description of |cipher| into |buf| and
@@ -5422,7 +5427,7 @@ OPENSSL_EXPORT SSL_SESSION *SSL_get1_session(SSL *ssl);
 #define OPENSSL_INIT_LOAD_SSL_STRINGS 0
 #define OPENSSL_INIT_SSL_DEFAULT 0
 
-// OPENSSL_init_ssl calls |CRYPTO_library_init| and returns one.
+// OPENSSL_init_ssl returns one.
 OPENSSL_EXPORT int OPENSSL_init_ssl(uint64_t opts,
                                     const OPENSSL_INIT_SETTINGS *settings);
 
