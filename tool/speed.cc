@@ -1149,12 +1149,12 @@ static bool SpeedMLKEM(const std::string &selected) {
         uint8_t encoded_public_key[MLKEM768_PUBLICKEYBYTES];
         uint8_t randomness[64];
         RAND_bytes(randomness, 64);
-        Libcrux_Mlkem768_GenerateKeyPair(encoded_public_key, priv, randomness);
+        Mlkem768_GenerateKeyPair(encoded_public_key, priv, randomness);
         uint8_t shared_secret[MLKEM768_SHAREDSECRETBYTES];
-        Libcrux_Mlkem768_Decapsulate(shared_secret, &ciphertext, &priv);
+        Mlkem768_Decapsulate(shared_secret, &ciphertext, &priv);
         return true;
       })) {
-    fprintf(stderr, "Failed to time Libcrux_Mlkem768_GenerateKeyPair + Libcrux_Mlkem768_Decapsulate.\n");
+    fprintf(stderr, "Failed to time Mlkem768_GenerateKeyPair + Mlkem768_Decapsulate.\n");
     return false;
   }
 
@@ -1164,14 +1164,14 @@ static bool SpeedMLKEM(const std::string &selected) {
   uint8_t encoded_public_key[MLKEM768_PUBLICKEYBYTES];
   uint8_t randomness[64];
   RAND_bytes(randomness, 64);
-  Libcrux_Mlkem768_GenerateKeyPair(encoded_public_key, priv, randomness);
+  Mlkem768_GenerateKeyPair(encoded_public_key, priv, randomness);
   
   if (!TimeFunctionParallel(&results, [&]() -> bool {
         uint8_t shared_secret[MLKEM768_SHAREDSECRETBYTES];
-        Libcrux_Mlkem768_Encapsulate(ciphertext, shared_secret, &encoded_public_key, randomness);
+        Mlkem768_Encapsulate(ciphertext, shared_secret, &encoded_public_key, randomness);
         return true;
       })) {
-    fprintf(stderr, "Failed to time Libcrux_Mlkem768_Encapsulate.\n");
+    fprintf(stderr, "Failed to time Mlkem768_Encapsulate.\n");
     return false;
   }
 
