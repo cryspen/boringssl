@@ -149,7 +149,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CLANG)
       CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL "13.0.0") OR
      (CMAKE_C_COMPILER_ID STREQUAL "AppleClang" AND
       CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL "13.1.6"))
-    set(C_CXX_FLAGS "${C_CXX_FLAGS} -Wframe-larger-than=25344")
+    # set(C_CXX_FLAGS "${C_CXX_FLAGS} -Wframe-larger-than=25344")
   endif()
 
   # -Wctad-maybe-unsupported was added in Clang 10, which is AppleClang 12.0.0.

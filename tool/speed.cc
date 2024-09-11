@@ -40,6 +40,7 @@
 #include <openssl/evp.h>
 #define OPENSSL_UNSTABLE_EXPERIMENTAL_KYBER
 #include <openssl/experimental/kyber.h>
+#include <openssl/libcrux-mlkem.h>
 #define OPENSSL_UNSTABLE_EXPERIMENTAL_SPX
 #include <openssl/experimental/spx.h>
 #include <openssl/hrss.h>
@@ -1133,6 +1134,102 @@ static bool SpeedKyber(const std::string &selected) {
   return true;
 }
 
+static bool SpeedMLKEMLibcrux(const std::string &selected) {
+  if (!selected.empty() && selected != "MLKEM") {
+    return true;
+  }
+
+  TimeResults results;
+
+  uint8_t ciphertext[MLKEM768_CIPHERTEXTBYTES];
+  // This ciphertext is nonsense, but MLKEM decap is constant-time so, for the
+  // purposes of timing, it's fine.
+  memset(ciphertext, 42, sizeof(ciphertext));
+  if (!TimeFunctionParallel(&results, [&]() -> bool {
+        uint8_t priv[MLKEM768_SECRETKEYBYTES];
+        uint8_t encoded_public_key[MLKEM768_PUBLICKEYBYTES];
+        uint8_t randomness[64];
+        RAND_bytes(randomness, 64);
+        Mlkem768_GenerateKeyPair(encoded_public_key, priv, randomness);
+        uint8_t shared_secret[MLKEM768_SHAREDSECRETBYTES];
+        Mlkem768_Decapsulate(shared_secret, &ciphertext, &priv);
+        return true;
+      })) {
+    fprintf(
+        stderr,
+        "Failed to time Mlkem768_GenerateKeyPair + Mlkem768_Decapsulate.\n");
+    return false;
+  }
+
+  results.Print("ML-KEM-768 generate + decap");
+
+  if (!TimeFunctionParallel(&results, [&]() -> bool {
+        MlKem768_KeyPairUnpacked key_pair;
+        uint8_t encoded_public_key[MLKEM768_PUBLICKEYBYTES];
+        uint8_t seed[MLKEM768_KEY_GENERATION_RANDOMNESS];
+        Mlkem768_GenerateKeyPairUnpacked(encoded_public_key, seed, &key_pair);
+        uint8_t shared_secret[MLKEM768_SHAREDSECRETBYTES];
+        MlKem768_Decapsulate(shared_secret, ciphertext, sizeof(ciphertext),
+                             &key_pair);
+        return true;
+      })) {
+    fprintf(
+        stderr,
+        "Failed to time Mlkem768_GenerateKeyPair + Mlkem768_Decapsulate.\n");
+    return false;
+  }
+
+  results.Print("ML-KEM-768 generate + decap (unpacked)");
+
+  uint8_t priv[MLKEM768_SECRETKEYBYTES];
+  uint8_t encoded_public_key[MLKEM768_PUBLICKEYBYTES];
+  uint8_t randomness[64];
+  RAND_bytes(randomness, 64);
+  Mlkem768_GenerateKeyPair(encoded_public_key, priv, randomness);
+
+  if (!TimeFunctionParallel(&results, [&]() -> bool {
+        uint8_t shared_secret[MLKEM768_SHAREDSECRETBYTES];
+        Mlkem768_Encapsulate(ciphertext, shared_secret, &encoded_public_key,
+                             randomness);
+        return true;
+      })) {
+    fprintf(stderr, "Failed to time Mlkem768_Encapsulate.\n");
+    return false;
+  }
+
+  results.Print("ML-KEM parse + encap");
+
+  MlKem768_KeyPairUnpacked key_pair;
+  uint8_t encoded_public_key2[MLKEM768_PUBLICKEYBYTES];
+  uint8_t seed[MLKEM768_KEY_GENERATION_RANDOMNESS];
+  Mlkem768_GenerateKeyPairUnpacked(encoded_public_key, seed, &key_pair);
+  (void)encoded_public_key2;
+
+  MlKem768_PublicKeyUnpacked public_key;
+  MlKem768_PublicKey(&public_key, &key_pair);
+
+  MlKem768_PublicKeyUnpacked pub;
+  if (!TimeFunctionParallel(&results, [&]() -> bool {
+        CBS encoded_public_key_cbs;
+        CBS_init(&encoded_public_key_cbs, encoded_public_key2,
+                 sizeof(encoded_public_key2));
+        if (!Mlkem768_ParsePublicKey(&pub, &encoded_public_key_cbs)) {
+          return false;
+        }
+
+        uint8_t shared_secret[MLKEM768_SHAREDSECRETBYTES];
+        MlKem768_Encapsulate(ciphertext, shared_secret, &pub);
+        return true;
+      })) {
+    fprintf(stderr, "Failed to time MlKem768_Encapsulate.\n");
+    return false;
+  }
+
+  results.Print("ML-KEM parse + encap (unpacked)");
+
+  return true;
+}
+
 static bool SpeedMLDSA(const std::string &selected) {
   if (!selected.empty() && selected != "ML-DSA") {
     return true;
@@ -1921,21 +2018,22 @@ bool Speed(const std::vector<std::string> &args) {
       !SpeedHash(EVP_sha256(), "SHA-256", selected) ||
       !SpeedHash(EVP_sha512(), "SHA-512", selected) ||
       !SpeedHash(EVP_blake2b256(), "BLAKE2b-256", selected) ||
-      !SpeedRandom(selected) ||       //
-      !SpeedECDH(selected) ||         //
-      !SpeedECDSA(selected) ||        //
-      !Speed25519(selected) ||        //
-      !SpeedSPAKE2(selected) ||       //
-      !SpeedScrypt(selected) ||       //
-      !SpeedRSAKeyGen(selected) ||    //
-      !SpeedHRSS(selected) ||         //
-      !SpeedKyber(selected) ||        //
-      !SpeedMLDSA(selected) ||        //
-      !SpeedMLKEM(selected) ||        //
-      !SpeedMLKEM1024(selected) ||    //
-      !SpeedSpx(selected) ||          //
-      !SpeedSLHDSA(selected) ||       //
-      !SpeedHashToCurve(selected) ||  //
+      !SpeedRandom(selected) ||        //
+      !SpeedECDH(selected) ||          //
+      !SpeedECDSA(selected) ||         //
+      !Speed25519(selected) ||         //
+      !SpeedSPAKE2(selected) ||        //
+      !SpeedScrypt(selected) ||        //
+      !SpeedRSAKeyGen(selected) ||     //
+      !SpeedHRSS(selected) ||          //
+      !SpeedKyber(selected) ||         //
+      !SpeedMLKEMLibcrux(selected) ||  //
+      !SpeedMLDSA(selected) ||         //
+      !SpeedMLKEM(selected) ||         //
+      !SpeedMLKEM1024(selected) ||     //
+      !SpeedSpx(selected) ||           //
+      !SpeedSLHDSA(selected) ||        //
+      !SpeedHashToCurve(selected) ||   //
       !SpeedTrustToken("TrustToken-Exp1-Batch1", TRUST_TOKEN_experiment_v1(), 1,
                        selected) ||
       !SpeedTrustToken("TrustToken-Exp1-Batch10", TRUST_TOKEN_experiment_v1(),
