@@ -372,11 +372,11 @@ set(
   crypto/keccak/keccak.c
   crypto/kyber/kyber.c
   crypto/lhash/lhash.c
-  crypto/libcrux-mlkem/libcrux_mlkem.c
   crypto/md4/md4.c
   crypto/md5/md5.c
   crypto/mem.c
   crypto/mldsa/mldsa.c
+  crypto/mlkem/libcrux_mlkem.c
   crypto/mlkem/mlkem.cc
   crypto/obj/obj.c
   crypto/obj/obj_xref.c
@@ -563,7 +563,6 @@ set(
   include/openssl/is_boringssl.h
   include/openssl/kdf.h
   include/openssl/lhash.h
-  include/openssl/libcrux-mlkem.h
   include/openssl/md4.h
   include/openssl/md5.h
   include/openssl/mem.h
@@ -653,6 +652,7 @@ set(
   crypto/md5/internal.h
   crypto/mldsa/internal.h
   crypto/mlkem/internal.h
+  crypto/mlkem/libcrux_mlkem.h
   crypto/obj/obj_dat.h
   crypto/pkcs7/internal.h
   crypto/pkcs8/internal.h
@@ -686,14 +686,12 @@ set(
   third_party/fiat/p256_64.h
   third_party/fiat/p256_64_msvc.h
   third_party/libcrux/eurydice_glue.h
-  third_party/libcrux/internal/libcrux_core.h
   third_party/libcrux/intrinsics/libcrux_intrinsics_avx2.h
-  third_party/libcrux/karamel/lowstar_endianness.h
   third_party/libcrux/karamel/target.h
   third_party/libcrux/libcrux_core.h
+  third_party/libcrux/libcrux_ct_ops.h
   third_party/libcrux/libcrux_mlkem768_avx2.h
   third_party/libcrux/libcrux_mlkem768_portable.h
-  third_party/libcrux/libcrux_mlkem_portable.h
   third_party/libcrux/libcrux_sha3_avx2.h
   third_party/libcrux/libcrux_sha3_portable.h
 )
@@ -788,9 +786,9 @@ set(
   crypto/keccak/keccak_test.cc
   crypto/kyber/kyber_test.cc
   crypto/lhash/lhash_test.cc
-  crypto/libcrux-mlkem/libcrux_mlkem_test.cc
   crypto/md5/md5_test.cc
   crypto/mldsa/mldsa_test.cc
+  crypto/mlkem/libcrux_mlkem_test.cc
   crypto/mlkem/mlkem_test.cc
   crypto/obj/obj_test.cc
   crypto/pem/pem_test.cc

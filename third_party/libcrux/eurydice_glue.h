@@ -145,10 +145,16 @@ static inline uint32_t core_num__u32_8__from_le_bytes(uint8_t buf[4]) {
 }
 
 static inline uint32_t core_num__u8_6__count_ones(uint8_t x0) {
-#ifdef _MSC_VER
+#if defined(__GNUC__) || defined(__clang__)
+  return __builtin_popcount(x0);
+#elif defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
+  // || defined(_M_ARM64)) // since MSVC 2022 17.11 Preview 3
   return __popcnt(x0);
 #else
-  return __builtin_popcount(x0);
+  x0 = (x0 & 0b01010101) + (x0>>1 & 0b01010101);
+  x0 = (x0 & 0b00110011) + (x0>>2 & 0b00110011);
+  x0 = (x0 & 0b00001111) + (x0>>4 & 0b00001111);
+  return x0;
 #endif
 }
 

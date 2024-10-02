@@ -103,7 +103,7 @@ void BasicTest() {
 
   std::vector<uint8_t> encoded_private_key(
       Marshal(MARSHAL_PRIVATE, priv.get()));
-  EXPECT_EQ(encoded_private_key.size(), size_t{PRIVATE_KEY_BYTES});
+  ASSERT_EQ(encoded_private_key.size(), size_t{PRIVATE_KEY_BYTES});
 
   OPENSSL_memcpy(first_two_bytes, encoded_private_key.data(),
                  sizeof(first_two_bytes));

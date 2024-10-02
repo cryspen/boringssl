@@ -28,6 +28,9 @@
 #include "../keccak/internal.h"
 #include "./internal.h"
 
+#if !defined(OPENSSL_SMALL)
+#include "libcrux_mlkem.h"
+#endif
 
 // See
 // https://csrc.nist.gov/pubs/fips/203/final
@@ -685,6 +688,9 @@ private_key_1024_from_external(const struct MLKEM1024_private_key *external) {
 void MLKEM768_generate_key(uint8_t out_encoded_public_key[MLKEM768_PUBLIC_KEY_BYTES],
                            uint8_t optional_out_seed[MLKEM_SEED_BYTES],
                            struct MLKEM768_private_key *out_private_key) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_generate_key_libcrux(out_encoded_public_key, optional_out_seed, out_private_key);
+#endif
   uint8_t seed[MLKEM_SEED_BYTES];
   RAND_bytes(seed, sizeof(seed));
   if (optional_out_seed) {
@@ -696,6 +702,9 @@ void MLKEM768_generate_key(uint8_t out_encoded_public_key[MLKEM768_PUBLIC_KEY_BY
 
 int MLKEM768_private_key_from_seed(struct MLKEM768_private_key *out_private_key,
                                    const uint8_t *seed, size_t seed_len) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_private_key_from_seed_libcrux(out_private_key, seed, seed_len);
+#endif
   if (seed_len != MLKEM_SEED_BYTES) {
     return 0;
   }
@@ -780,6 +789,9 @@ void MLKEM768_generate_key_external_seed(
     uint8_t out_encoded_public_key[MLKEM768_PUBLIC_KEY_BYTES],
     struct MLKEM768_private_key *out_private_key,
     const uint8_t seed[MLKEM_SEED_BYTES]) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_generate_key_external_seed_libcrux(out_encoded_public_key, out_private_key, seed);
+#endif
   private_key<RANK768> *priv = private_key_768_from_external(out_private_key);
   mlkem_generate_key_external_seed(out_encoded_public_key, priv, seed);
 }
@@ -795,6 +807,9 @@ void MLKEM1024_generate_key_external_seed(
 void MLKEM768_public_from_private(
     struct MLKEM768_public_key *out_public_key,
     const struct MLKEM768_private_key *private_key) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_public_from_private_libcrux(out_public_key, private_key);
+#endif
   struct public_key<RANK768> *const pub =
       public_key_768_from_external(out_public_key);
   const struct ::private_key<RANK768> *const priv =
@@ -856,6 +871,9 @@ static void encrypt_cpa(uint8_t *out, const struct public_key<RANK> *pub,
 void MLKEM768_encap(uint8_t out_ciphertext[MLKEM768_CIPHERTEXT_BYTES],
                     uint8_t out_shared_secret[MLKEM_SHARED_SECRET_BYTES],
                     const struct MLKEM768_public_key *public_key) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_encap_libcrux(out_ciphertext, out_shared_secret, public_key);
+#endif
   uint8_t entropy[MLKEM_ENCAP_ENTROPY];
   RAND_bytes(entropy, MLKEM_ENCAP_ENTROPY);
   MLKEM768_encap_external_entropy(out_ciphertext, out_shared_secret, public_key,
@@ -894,6 +912,9 @@ void MLKEM768_encap_external_entropy(
     uint8_t out_shared_secret[MLKEM_SHARED_SECRET_BYTES],
     const struct MLKEM768_public_key *public_key,
     const uint8_t entropy[MLKEM_ENCAP_ENTROPY]) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_encap_external_entropy_libcrux(out_ciphertext, out_shared_secret, public_key, entropy);
+#endif
   const struct ::public_key<RANK768> *pub =
       public_key_768_from_external(public_key);
   mlkem_encap_external_entropy(out_ciphertext, out_shared_secret, pub, entropy);
@@ -961,6 +982,9 @@ static void mlkem_decap(uint8_t out_shared_secret[MLKEM_SHARED_SECRET_BYTES],
 int MLKEM768_decap(uint8_t out_shared_secret[MLKEM_SHARED_SECRET_BYTES],
                    const uint8_t *ciphertext, size_t ciphertext_len,
                    const struct MLKEM768_private_key *private_key) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_decap_libcrux(out_shared_secret, ciphertext, ciphertext_len, private_key);
+#endif
   if (ciphertext_len != MLKEM768_CIPHERTEXT_BYTES) {
     RAND_bytes(out_shared_secret, MLKEM_SHARED_SECRET_BYTES);
     return 0;
@@ -986,6 +1010,9 @@ int MLKEM1024_decap(uint8_t out_shared_secret[MLKEM_SHARED_SECRET_BYTES],
 
 int MLKEM768_marshal_public_key(CBB *out,
                                 const struct MLKEM768_public_key *public_key) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_marshal_public_key_libcrux(out, public_key);
+#endif
   return mlkem_marshal_public_key(out,
                                   public_key_768_from_external(public_key));
 }
@@ -1023,6 +1050,9 @@ static int mlkem_parse_public_key(struct public_key<RANK> *pub, CBS *in) {
 }
 
 int MLKEM768_parse_public_key(struct MLKEM768_public_key *public_key, CBS *in) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_parse_public_key_libcrux(public_key, in);
+#endif
   struct ::public_key<RANK768> *pub = public_key_768_from_external(public_key);
   return mlkem_parse_public_key(pub, in);
 }
@@ -1054,6 +1084,9 @@ static int mlkem_marshal_private_key(CBB *out,
 
 int MLKEM768_marshal_private_key(
     CBB *out, const struct MLKEM768_private_key *private_key) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_marshal_private_key_libcrux(out, private_key);
+#endif
   const struct ::private_key<RANK768> *const priv =
       private_key_768_from_external(private_key);
   return mlkem_marshal_private_key(out, priv);
@@ -1084,6 +1117,9 @@ static int mlkem_parse_private_key(struct private_key<RANK> *priv, CBS *in) {
 
 int MLKEM768_parse_private_key(struct MLKEM768_private_key *out_private_key,
                                CBS *in) {
+#if !defined(OPENSSL_SMALL)
+  return MLKEM768_parse_private_key_libcrux(out_private_key, in);
+#endif
   struct private_key<RANK768> *const priv =
       private_key_768_from_external(out_private_key);
   return mlkem_parse_private_key(priv, in);
