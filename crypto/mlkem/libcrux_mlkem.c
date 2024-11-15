@@ -79,7 +79,8 @@ int MLKEM768_parse_public_key_libcrux(struct MLKEM768_public_key *out_public_key
                             CBS *in) {
   libcrux_ml_kem_types_MlKemPublicKey_30 public_key;
   if (!CBS_copy_bytes(in, (uint8_t *)&public_key.value,
-                      MLKEM768_PUBLIC_KEY_BYTES)) {
+                      MLKEM768_PUBLIC_KEY_BYTES)
+      || CBS_len(in) != 0) {
     // Couldn't read the necessary bytes.
     printf("Error reading bytes from CBS\n");
     return 0;
@@ -229,10 +230,10 @@ int MLKEM768_marshal_private_key_libcrux(
 
 int MLKEM768_parse_private_key_libcrux(
     struct MLKEM768_private_key *out_private_key, CBS *in) {
- 
   libcrux_ml_kem_types_MlKemPrivateKey_d9 private_key_in;
   if (!CBS_copy_bytes(in, (uint8_t *)&private_key_in.value,
-                      MLKEM768_PRIVATE_KEY_BYTES)) {
+                      MLKEM768_PRIVATE_KEY_BYTES) ||
+      CBS_len(in) != 0) {
     // Couldn't read the necessary bytes.
     printf("Error reading bytes from CBS\n");
     return 0;
@@ -246,6 +247,23 @@ int MLKEM768_parse_private_key_libcrux(
   libcrux_ml_kem_mlkem768_portable_unpacked_key_pair_from_private_mut(
     &private_key_in,
     (libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768KeyPairUnpacked*)out_private_key);
+
+  // Check that the private key values are in the correct domain.
+  // This is not a check from the spec, so we do it here on top.
+  libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768KeyPairUnpacked *key =
+    (libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768KeyPairUnpacked*)out_private_key;
+  bool ok = true;
+  for (size_t i = 0; i < 3; i++) {
+    for (size_t j = 0; j < 16; j++) {
+      for (size_t k = 0; k < 16; k++) {
+        ok &= key->private_key.ind_cpa_private_key.secret_as_ntt[i].coefficients[j].elements[k] <= 3329;
+      }
+    }
+  }
+  if (!ok) {
+    printf("Error, private key has elements that are too big\n");
+    return 0;
+  }
 
   return 1; // TODO
 }
