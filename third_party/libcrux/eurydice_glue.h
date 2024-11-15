@@ -130,18 +130,14 @@ static inline void Eurydice_slice_to_array3(uint8_t *dst_tag, char *dst_ok,
 // CORE STUFF (conversions, endianness, ...)
 
 static inline void core_num__u64_9__to_le_bytes(uint64_t v, uint8_t buf[8]) {
-  memcpy(buf, &v, sizeof(v));
+  CRYPTO_store_u64_le(buf, v);
 }
 static inline uint64_t core_num__u64_9__from_le_bytes(uint8_t buf[8]) {
-  uint64_t v;
-  memcpy(&v, buf, sizeof(v));
-  return v;
+  return CRYPTO_load_u64_le(buf);
 }
 
 static inline uint32_t core_num__u32_8__from_le_bytes(uint8_t buf[4]) {
-  uint32_t v;
-  memcpy(&v, buf, sizeof(v));
-  return v;
+  return CRYPTO_load_u32_le(buf);
 }
 
 static inline uint32_t core_num__u8_6__count_ones(uint8_t x0) {
@@ -151,9 +147,9 @@ static inline uint32_t core_num__u8_6__count_ones(uint8_t x0) {
   // || defined(_M_ARM64)) // since MSVC 2022 17.11 Preview 3
   return __popcnt(x0);
 #else
-  x0 = (x0 & 0b01010101) + (x0>>1 & 0b01010101);
-  x0 = (x0 & 0b00110011) + (x0>>2 & 0b00110011);
-  x0 = (x0 & 0b00001111) + (x0>>4 & 0b00001111);
+  x0 = (x0 & 0b01010101) + (x0 >> 1 & 0b01010101);
+  x0 = (x0 & 0b00110011) + (x0 >> 2 & 0b00110011);
+  x0 = (x0 & 0b00001111) + (x0 >> 4 & 0b00001111);
   return x0;
 #endif
 }
