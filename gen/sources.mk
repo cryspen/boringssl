@@ -80,6 +80,7 @@ boringssl_bcm_internal_headers := \
   crypto/fipsmodule/mldsa/fips_known_values.inc \
   crypto/fipsmodule/mldsa/mldsa.cc.inc \
   crypto/fipsmodule/mlkem/fips_known_values.inc \
+  crypto/fipsmodule/mlkem/libcrux_mlkem.cc.inc \
   crypto/fipsmodule/mlkem/mlkem.cc.inc \
   crypto/fipsmodule/rand/ctrdrbg.cc.inc \
   crypto/fipsmodule/rand/rand.cc.inc \
@@ -652,7 +653,16 @@ boringssl_crypto_internal_headers := \
   third_party/fiat/curve25519_64_msvc.h \
   third_party/fiat/p256_32.h \
   third_party/fiat/p256_64.h \
-  third_party/fiat/p256_64_msvc.h
+  third_party/fiat/p256_64_msvc.h \
+  third_party/libcrux/eurydice_glue.h \
+  third_party/libcrux/intrinsics/libcrux_intrinsics_avx2.h \
+  third_party/libcrux/karamel/target.h \
+  third_party/libcrux/libcrux_ct_ops.h \
+  third_party/libcrux/libcrux_mlkem768_avx2.h \
+  third_party/libcrux/libcrux_mlkem768_portable.h \
+  third_party/libcrux/libcrux_mlkem_core.h \
+  third_party/libcrux/libcrux_sha3_avx2.h \
+  third_party/libcrux/libcrux_sha3_portable.h
 
 boringssl_crypto_sources_asm := \
   crypto/curve25519/asm/x25519-asm-arm.S \
