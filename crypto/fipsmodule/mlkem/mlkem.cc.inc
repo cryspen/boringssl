@@ -31,8 +31,12 @@
 
 #if !defined(OPENSSL_SMALL)
 #include "libcrux_mlkem.cc.inc"
+
+#if defined(OPENSSL_X86_64)
+#include "../../../third_party/libcrux/libcrux_mlkem768_avx2.h"
 #endif
 
+#endif
 
 namespace mlkem {
 namespace {
@@ -931,6 +935,22 @@ void mlkem_encap_external_entropy_no_self_test(
     uint8_t out_shared_secret[BCM_MLKEM_SHARED_SECRET_BYTES],
     const struct mlkem::public_key<RANK> *pub,
     const uint8_t entropy[BCM_MLKEM_ENCAP_ENTROPY]) {
+#if !defined(OPENSSL_SMALL)
+  if (RANK == 3) {  // MLKEM768 only
+    libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked
+        libcrux_public_key;
+    MLKEM768_libcrux_public_key_avx2(&libcrux_public_key, pub);
+
+
+    tuple_c2 ct_zz = libcrux_ml_kem_mlkem768_avx2_unpacked_encapsulate(
+        &libcrux_public_key, const_cast<uint8_t *>(entropy));
+
+    OPENSSL_memcpy(out_ciphertext, ct_zz.fst.value, MLKEM768_CIPHERTEXT_BYTES);
+    OPENSSL_memcpy(out_shared_secret, ct_zz.snd, MLKEM_SHARED_SECRET_BYTES);
+    return;
+  }
+#endif
+
   uint8_t input[64];
   OPENSSL_memcpy(input, entropy, BCM_MLKEM_ENCAP_ENTROPY);
   OPENSSL_memcpy(input + BCM_MLKEM_ENCAP_ENTROPY, pub->public_key_hash,
@@ -942,6 +962,31 @@ void mlkem_encap_external_entropy_no_self_test(
   CONSTTIME_DECLASSIFY(out_ciphertext, mlkem::ciphertext_size(RANK));
   static_assert(BCM_MLKEM_SHARED_SECRET_BYTES == 32, "");
   memcpy(out_shared_secret, key_and_randomness, 32);
+}
+
+template <int RANK>
+void mlkem_encap_external_entropy_no_self_test_priv768(
+    uint8_t *out_ciphertext,
+    uint8_t out_shared_secret[BCM_MLKEM_SHARED_SECRET_BYTES],
+    const struct BCM_mlkem768_private_key *private_key,
+    const uint8_t entropy[BCM_MLKEM_ENCAP_ENTROPY]) {
+#if !defined(OPENSSL_SMALL)
+  if (RANK == 3) {  // MLKEM768
+    struct MLKEM768_public_key public_key;
+    MLKEM768_public_from_private_libcrux(
+        &public_key,
+        reinterpret_cast<const MLKEM768_private_key *>(private_key));
+
+    MLKEM768_encap_external_entropy_libcrux(out_ciphertext, out_shared_secret,
+                                            &public_key, entropy);
+  }
+  return;
+#endif
+
+  mlkem::private_key<RANK768> *priv =
+      mlkem::private_key_768_from_external(private_key);
+  mlkem_encap_external_entropy_no_self_test(out_ciphertext, out_shared_secret,
+                                            &priv->pub, entropy);
 }
 
 template <int RANK>
@@ -1084,17 +1129,8 @@ bcm_status BCM_mlkem768_check_fips(
   uint8_t ciphertext[BCM_MLKEM768_CIPHERTEXT_BYTES];
   uint8_t shared_secret[BCM_MLKEM_SHARED_SECRET_BYTES];
 
-#if !defined(OPENSSL_SMALL)
-  struct MLKEM768_public_key public_key;
-  MLKEM768_public_from_private_libcrux(
-    &public_key, reinterpret_cast<const MLKEM768_private_key *>(private_key));
-  MLKEM768_encap_external_entropy_libcrux(ciphertext, shared_secret, &public_key, entropy);
-#else
-  mlkem::private_key<RANK768> *priv =
-      mlkem::private_key_768_from_external(private_key);
-  mlkem_encap_external_entropy_no_self_test(ciphertext, shared_secret,
-                                            &priv->pub, entropy);
-#endif
+  mlkem::mlkem_encap_external_entropy_no_self_test_priv768<RANK768>(
+      ciphertext, shared_secret, private_key, entropy);
 
   if (boringssl_fips_break_test("MLKEM_PWCT")) {
     shared_secret[0] ^= 1;
@@ -1104,8 +1140,9 @@ bcm_status BCM_mlkem768_check_fips(
 
 #if !defined(OPENSSL_SMALL)
   constexpr size_t ciphertext_len = mlkem::ciphertext_size(RANK768);
-  MLKEM768_decap_libcrux(shared_secret2, ciphertext, ciphertext_len,
-                         reinterpret_cast<const MLKEM768_private_key *>(private_key));
+  MLKEM768_decap_libcrux(
+      shared_secret2, ciphertext, ciphertext_len,
+      reinterpret_cast<const MLKEM768_private_key *>(private_key));
 #else
   mlkem::mlkem_decap_no_self_test(shared_secret2, ciphertext, priv);
 #endif
@@ -1141,9 +1178,9 @@ bcm_infallible BCM_mlkem768_generate_key(
   }
 
 #if !defined(OPENSSL_SMALL)
-  MLKEM768_generate_key_external_seed_libcrux(out_encoded_public_key,
-                                              reinterpret_cast<MLKEM768_private_key *>(out_private_key),
-                                              seed);
+  MLKEM768_generate_key_external_seed_libcrux(
+      out_encoded_public_key,
+      reinterpret_cast<MLKEM768_private_key *>(out_private_key), seed);
   return bcm_infallible::not_approved;
 #endif
 
@@ -1156,8 +1193,9 @@ bcm_status BCM_mlkem768_private_key_from_seed(
     struct BCM_mlkem768_private_key *out_private_key, const uint8_t *seed,
     size_t seed_len) {
 #if !defined(OPENSSL_SMALL)
-  int r = MLKEM768_private_key_from_seed_libcrux(reinterpret_cast<MLKEM768_private_key *>(out_private_key),
-                                                 seed, seed_len);
+  int r = MLKEM768_private_key_from_seed_libcrux(
+      reinterpret_cast<MLKEM768_private_key *>(out_private_key), seed,
+      seed_len);
   if (!r) {
     return bcm_status::failure;
   }
@@ -1242,7 +1280,9 @@ bcm_infallible BCM_mlkem768_generate_key_external_seed(
     struct BCM_mlkem768_private_key *out_private_key,
     const uint8_t seed[BCM_MLKEM_SEED_BYTES]) {
 #if !defined(OPENSSL_SMALL)
-  MLKEM768_generate_key_external_seed_libcrux(out_encoded_public_key, reinterpret_cast<MLKEM768_private_key*>(out_private_key), seed);
+  MLKEM768_generate_key_external_seed_libcrux(
+      out_encoded_public_key,
+      reinterpret_cast<MLKEM768_private_key *>(out_private_key), seed);
   return bcm_infallible::approved;
 #endif
 
@@ -1297,12 +1337,6 @@ bcm_infallible BCM_mlkem768_encap(
     uint8_t out_ciphertext[BCM_MLKEM768_CIPHERTEXT_BYTES],
     uint8_t out_shared_secret[BCM_MLKEM_SHARED_SECRET_BYTES],
     const struct BCM_mlkem768_public_key *public_key) {
-#if !defined(OPENSSL_SMALL)
-  MLKEM768_encap_libcrux(out_ciphertext, out_shared_secret,
-                         reinterpret_cast<const MLKEM768_public_key *>(public_key));
-  return bcm_infallible::approved;
-#endif
-
   uint8_t entropy[BCM_MLKEM_ENCAP_ENTROPY];
   BCM_rand_bytes(entropy, BCM_MLKEM_ENCAP_ENTROPY);
   CONSTTIME_SECRET(entropy, BCM_MLKEM_ENCAP_ENTROPY);
@@ -1328,12 +1362,6 @@ bcm_infallible BCM_mlkem768_encap_external_entropy(
     uint8_t out_shared_secret[BCM_MLKEM_SHARED_SECRET_BYTES],
     const struct BCM_mlkem768_public_key *public_key,
     const uint8_t entropy[BCM_MLKEM_ENCAP_ENTROPY]) {
-#if !defined(OPENSSL_SMALL)
-  MLKEM768_encap_external_entropy_libcrux(
-    out_ciphertext, out_shared_secret, reinterpret_cast<const MLKEM768_public_key*>(public_key), entropy);
-  return bcm_infallible::approved;
-#endif
-
   const struct mlkem::public_key<RANK768> *pub =
       mlkem::public_key_768_from_external(public_key);
   mlkem_encap_external_entropy(out_ciphertext, out_shared_secret, pub, entropy);
@@ -1356,12 +1384,13 @@ bcm_status BCM_mlkem768_decap(
     const uint8_t *ciphertext, size_t ciphertext_len,
     const struct BCM_mlkem768_private_key *private_key) {
 #if !defined(OPENSSL_SMALL)
-    int r = MLKEM768_decap_libcrux(out_shared_secret, ciphertext, ciphertext_len,
-                                   reinterpret_cast<const MLKEM768_private_key *>(private_key));
-    if (!r) {
-      return bcm_status::failure;
-    }
-    return bcm_status::approved;
+  int r = MLKEM768_decap_libcrux(
+      out_shared_secret, ciphertext, ciphertext_len,
+      reinterpret_cast<const MLKEM768_private_key *>(private_key));
+  if (!r) {
+    return bcm_status::failure;
+  }
+  return bcm_status::approved;
 #endif
 
   if (ciphertext_len != BCM_MLKEM768_CIPHERTEXT_BYTES) {
@@ -1391,8 +1420,8 @@ bcm_status BCM_mlkem1024_decap(
 bcm_status BCM_mlkem768_marshal_public_key(
     CBB *out, const struct BCM_mlkem768_public_key *public_key) {
 #if !defined(OPENSSL_SMALL)
-  int r = MLKEM768_marshal_public_key_libcrux(out,
-                                              reinterpret_cast<const MLKEM768_public_key *>(public_key));
+  int r = MLKEM768_marshal_public_key_libcrux(
+      out, reinterpret_cast<const MLKEM768_public_key *>(public_key));
   if (!r) {
     return bcm_status::failure;
   }
@@ -1412,7 +1441,8 @@ bcm_status BCM_mlkem1024_marshal_public_key(
 bcm_status BCM_mlkem768_parse_public_key(
     struct BCM_mlkem768_public_key *public_key, CBS *in) {
 #if !defined(OPENSSL_SMALL)
-  int r = MLKEM768_parse_public_key_libcrux(reinterpret_cast<MLKEM768_public_key *>(public_key), in);
+  int r = MLKEM768_parse_public_key_libcrux(
+      reinterpret_cast<MLKEM768_public_key *>(public_key), in);
   if (!r) {
     return bcm_status::failure;
   }
@@ -1440,11 +1470,12 @@ bcm_status BCM_mlkem1024_parse_public_key(
 bcm_status BCM_mlkem768_marshal_private_key(
     CBB *out, const struct BCM_mlkem768_private_key *private_key) {
 #if !defined(OPENSSL_SMALL)
-    if (MLKEM768_marshal_private_key_libcrux(out,  reinterpret_cast<const MLKEM768_private_key*>(private_key))) {
-      return bcm_status::approved;
-    } else {
-      return bcm_status::failure;
-    }
+  if (MLKEM768_marshal_private_key_libcrux(
+          out, reinterpret_cast<const MLKEM768_private_key *>(private_key))) {
+    return bcm_status::approved;
+  } else {
+    return bcm_status::failure;
+  }
 #endif
 
   const struct mlkem::private_key<RANK768> *const priv =
@@ -1468,11 +1499,12 @@ bcm_status BCM_mlkem1024_marshal_private_key(
 bcm_status BCM_mlkem768_parse_private_key(
     struct BCM_mlkem768_private_key *out_private_key, CBS *in) {
 #if !defined(OPENSSL_SMALL)
-    if (MLKEM768_parse_private_key_libcrux(reinterpret_cast<MLKEM768_private_key*>(out_private_key), in)) {
-      return bcm_status::approved;
-    } else {
-      return bcm_status::failure;
-    }
+  if (MLKEM768_parse_private_key_libcrux(
+          reinterpret_cast<MLKEM768_private_key *>(out_private_key), in)) {
+    return bcm_status::approved;
+  } else {
+    return bcm_status::failure;
+  }
 #endif
 
   struct mlkem::private_key<RANK768> *const priv =
@@ -1497,3 +1529,40 @@ int boringssl_self_test_mlkem() {
   return mlkem::fips::keygen_self_test() && mlkem::fips::encap_self_test() &&
          mlkem::fips::decap_self_test();
 }
+
+// Libcrux key conversion functions
+
+#if defined(OPENSSL_X86_64)
+// We assume in here that `CRYPTO_is_AVX2_capable()` has been checked before.
+
+// Copy a public key to a libcrux public key.
+template <int RANK>
+void MLKEM768_libcrux_public_key_avx2(
+    libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked
+        *out_public_key,
+    const struct mlkem::public_key<RANK> *public_key) {
+  assert(RANK == RANK768);
+  static_assert(
+      sizeof(struct MLKEM768_public_key) ==
+          sizeof(
+              libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked),
+      "");
+
+  memcpy(&out_public_key->public_key_hash, public_key->public_key_hash,
+         sizeof(public_key->public_key_hash));
+  memcpy(&out_public_key->ind_cpa_public_key.A, &public_key->m,
+         sizeof(public_key->m));
+  memcpy(&out_public_key->ind_cpa_public_key.seed_for_A, &public_key->rho,
+         sizeof(public_key->rho));
+  memcpy(&out_public_key->ind_cpa_public_key.t_as_ntt, &public_key->t,
+         sizeof(public_key->t));
+}
+
+// // Copy a private key (key pair) to a libcrux public key.
+// void MLKEM768_libcrux_public_from_private_avx2(
+//     libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked
+//         *out_public_key,
+//     const struct mlkem::private_key<RANK768> *key_pair) {
+//   MLKEM768_libcrux_public_key_avx2(out_public_key, &key_pair->pub);
+// }
+#endif  // defined(OPENSSL_X86_64)

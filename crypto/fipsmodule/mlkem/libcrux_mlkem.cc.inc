@@ -448,13 +448,13 @@ static int MLKEM768_parse_private_key_libcrux(
   return 1;
 }
 
-// Calls |MLKEM768_encap_external_entropy| with random bytes from |RAND_bytes|
-static void MLKEM768_encap_libcrux(
-    uint8_t out_ciphertext[MLKEM768_CIPHERTEXT_BYTES],
-    uint8_t out_shared_secret[MLKEM_SHARED_SECRET_BYTES],
-    const struct MLKEM768_public_key *public_key) {
-  uint8_t entropy[BCM_MLKEM_ENCAP_ENTROPY];
-  RAND_bytes(entropy, BCM_MLKEM_ENCAP_ENTROPY);
-  MLKEM768_encap_external_entropy_libcrux(out_ciphertext, out_shared_secret,
-                                          public_key, entropy);
-}
+// // Calls |MLKEM768_encap_external_entropy| with random bytes from |RAND_bytes|
+// static void MLKEM768_encap_libcrux(
+//     uint8_t out_ciphertext[MLKEM768_CIPHERTEXT_BYTES],
+//     uint8_t out_shared_secret[MLKEM_SHARED_SECRET_BYTES],
+//     const struct MLKEM768_public_key *public_key) {
+//   uint8_t entropy[BCM_MLKEM_ENCAP_ENTROPY];
+//   RAND_bytes(entropy, BCM_MLKEM_ENCAP_ENTROPY);
+//   MLKEM768_encap_external_entropy_libcrux(out_ciphertext, out_shared_secret,
+//                                           public_key, entropy);
+// }
