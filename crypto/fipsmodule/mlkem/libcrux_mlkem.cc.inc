@@ -180,61 +180,61 @@ static int MLKEM768_private_key_from_seed_libcrux(
   return 1;
 }
 
-static int MLKEM768_parse_public_key_libcrux(
-    struct MLKEM768_public_key *out_public_key, CBS *in) {
-  libcrux_ml_kem_types_MlKemPublicKey_30 public_key;
-  if (!CBS_copy_bytes(in, (uint8_t *)&public_key.value,
-                      MLKEM768_PUBLIC_KEY_BYTES) ||
-      CBS_len(in) != 0) {
-    // Couldn't read the necessary bytes.
-    return 0;
-  }
+// static int MLKEM768_parse_public_key_libcrux(
+//     struct MLKEM768_public_key *out_public_key, CBS *in) {
+//   libcrux_ml_kem_types_MlKemPublicKey_30 public_key;
+//   if (!CBS_copy_bytes(in, (uint8_t *)&public_key.value,
+//                       MLKEM768_PUBLIC_KEY_BYTES) ||
+//       CBS_len(in) != 0) {
+//     // Couldn't read the necessary bytes.
+//     return 0;
+//   }
 
-  // Validate the public key.
-  if (!libcrux_ml_kem_mlkem768_portable_validate_public_key(&public_key)) {
-    // The public key is invalid.
-    return 0;
-  }
+//   // Validate the public key.
+//   if (!libcrux_ml_kem_mlkem768_portable_validate_public_key(&public_key)) {
+//     // The public key is invalid.
+//     return 0;
+//   }
 
 
-#if defined(OPENSSL_X86_64)
-  if (CRYPTO_is_AVX2_capable()) {
-    static_assert(
-        sizeof(struct MLKEM768_public_key) ==
-            sizeof(
-                libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked),
-        "");
+// #if defined(OPENSSL_X86_64)
+//   if (CRYPTO_is_AVX2_capable()) {
+//     static_assert(
+//         sizeof(struct MLKEM768_public_key) ==
+//             sizeof(
+//                 libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked),
+//         "");
 
-    // Unpack the public key
-    libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked key;
-    libcrux_ml_kem_mlkem768_avx2_unpacked_unpacked_public_key(&public_key,
-                                                              &key);
+//     // Unpack the public key
+//     libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked key;
+//     libcrux_ml_kem_mlkem768_avx2_unpacked_unpacked_public_key(&public_key,
+//                                                               &key);
 
-    // Write out public key to bytes
-    // Copy m256i from key.
-    OPENSSL_memcpy(&out_public_key->opaque.bytes, &key,
-                   sizeof(out_public_key->opaque.bytes));
+//     // Write out public key to bytes
+//     // Copy m256i from key.
+//     OPENSSL_memcpy(&out_public_key->opaque.bytes, &key,
+//                    sizeof(out_public_key->opaque.bytes));
 
-    return 1;
-  }
-#endif  // OPENSSL_X86_64
-  static_assert(
-      sizeof(struct MLKEM768_public_key) ==
-          sizeof(
-              libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768PublicKeyUnpacked),
-      "");
+//     return 1;
+//   }
+// #endif  // OPENSSL_X86_64
+//   static_assert(
+//       sizeof(struct MLKEM768_public_key) ==
+//           sizeof(
+//               libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768PublicKeyUnpacked),
+//       "");
 
-  libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768PublicKeyUnpacked key;
+//   libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768PublicKeyUnpacked key;
 
-  // Unpack the public key
-  libcrux_ml_kem_mlkem768_portable_unpacked_unpacked_public_key(&public_key,
-                                                                &key);
+//   // Unpack the public key
+//   libcrux_ml_kem_mlkem768_portable_unpacked_unpacked_public_key(&public_key,
+//                                                                 &key);
 
-  OPENSSL_memcpy(&out_public_key->opaque.bytes, &key,
-                 sizeof(out_public_key->opaque.bytes));
+//   OPENSSL_memcpy(&out_public_key->opaque.bytes, &key,
+//                  sizeof(out_public_key->opaque.bytes));
 
-  return 1;
-}
+//   return 1;
+// }
 
 static int MLKEM768_marshal_public_key_libcrux(
     CBB *out, const struct MLKEM768_public_key *public_key) {
