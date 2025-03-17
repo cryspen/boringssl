@@ -136,6 +136,12 @@ void BasicTest() {
   uint8_t seed[MLKEM_SEED_BYTES];
   auto priv = std::make_unique<PRIVATE_KEY>();
   GENERATE(encoded_public_key, seed, priv.get());
+  // uint8_t *priv_bytes = (uint8_t *)priv.get();
+  // printf("priv_bytes\n");
+  // for (size_t i = 0; i < sizeof(struct MLKEM768_private_key); i++) {
+  //   printf("%02x", priv_bytes[i]);
+  // }
+  // printf("\n");
 
   {
     auto priv2 = std::make_unique<PRIVATE_KEY>();
@@ -165,6 +171,8 @@ void BasicTest() {
 
   auto pub2 = std::make_unique<PUBLIC_KEY>();
   PUBLIC_FROM_PRIVATE(pub2.get(), priv.get());
+  // printf("pubs: %s\n",
+  //        memcmp(pub.get(), pub2.get(), sizeof(PUBLIC_KEY)) == 0 ? "eq" : "foo");
   EXPECT_EQ(Bytes(encoded_public_key),
             Bytes(Marshal(MARSHAL_PUBLIC, pub2.get())));
 
