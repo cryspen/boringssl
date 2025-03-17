@@ -85,7 +85,6 @@ set(
   crypto/fipsmodule/mldsa/fips_known_values.inc
   crypto/fipsmodule/mldsa/mldsa.cc.inc
   crypto/fipsmodule/mlkem/fips_known_values.inc
-  crypto/fipsmodule/mlkem/libcrux_mlkem.cc.inc
   crypto/fipsmodule/mlkem/mlkem.cc.inc
   crypto/fipsmodule/rand/ctrdrbg.cc.inc
   crypto/fipsmodule/rand/rand.cc.inc
