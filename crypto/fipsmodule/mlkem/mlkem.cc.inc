@@ -710,6 +710,8 @@ void mlkem_generate_key_external_seed_no_self_test(
     const uint8_t seed[BCM_MLKEM_SEED_BYTES]) {
 #if !defined(OPENSSL_SMALL)
   if (RANK == 3) {  // MLKEM768 only for now.
+    // We need to put some of this on the heap to avoid stack frame sizes that
+    // are too large.
 #if defined(OPENSSL_X86_64)
     if (CRYPTO_is_AVX2_capable()) {
       // Copy priv into the libcrux key type.
@@ -730,6 +732,7 @@ void mlkem_generate_key_external_seed_no_self_test(
       // Copy the encoded public key out.
       OPENSSL_memcpy(out_encoded_public_key, libcrux_public_key->value,
                      sizeof(libcrux_ml_kem_types_MlKemPublicKey_30));
+      return;
     }
 #endif  // defined(OPENSSL_X86_64)
     // Copy priv into the libcrux key type.
@@ -750,6 +753,7 @@ void mlkem_generate_key_external_seed_no_self_test(
     // Copy the encoded public key out.
     OPENSSL_memcpy(out_encoded_public_key, libcrux_public_key->value,
                    sizeof(libcrux_ml_kem_types_MlKemPublicKey_30));
+    return;
   }
 #endif  // !defined(OPENSSL_SMALL)
 
