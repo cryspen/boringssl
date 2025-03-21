@@ -925,7 +925,7 @@ template <int RANK>
 int mlkem_parse_public_key(struct public_key<RANK> *pub, CBS *in) {
 #if !defined(OPENSSL_SMALL)
   // This functions isn't only parsing, but also validating.
-  if (RANK == RANK768) {
+  if (RANK == 3) {  // MLKEM768 only for now.
     // Copy the bytes into the libcrux serialized key type.
     libcrux_ml_kem_types_MlKemPublicKey_30 serialized;
     if (!CBS_copy_bytes(in, (uint8_t *)serialized.value,
@@ -965,45 +965,48 @@ int mlkem_parse_public_key(struct public_key<RANK> *pub, CBS *in) {
 template <int RANK>
 int mlkem_parse_private_key(struct private_key<RANK> *priv, CBS *in) {
 #if !defined(OPENSSL_SMALL)
-  libcrux_ml_kem_types_MlKemPrivateKey_d9 private_key_in;
-  if (!CBS_copy_bytes(in, (uint8_t *)&private_key_in.value,
-                      BCM_MLKEM768_PRIVATE_KEY_BYTES) ||
-      CBS_len(in) != 0) {
-    // Couldn't read the necessary bytes.
-    return 0;
-  }
+  if (RANK == 3) {  // MLKEM768 only for now.
+    libcrux_ml_kem_types_MlKemPrivateKey_d9 private_key_in;
+    if (!CBS_copy_bytes(in, (uint8_t *)&private_key_in.value,
+                        BCM_MLKEM768_PRIVATE_KEY_BYTES) ||
+        CBS_len(in) != 0) {
+      // Couldn't read the necessary bytes.
+      return 0;
+    }
 
-  // Validate the private key
-  if (!libcrux_ml_kem_mlkem768_portable_validate_private_key_only(
-          &private_key_in)) {
-    return 0;
-  }
+    // Validate the private key
+    if (!libcrux_ml_kem_mlkem768_portable_validate_private_key_only(
+            &private_key_in)) {
+      return 0;
+    }
 
-  libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768KeyPairUnpacked
-      libcrux_key_pair;
-  libcrux_ml_kem_mlkem768_portable_unpacked_key_pair_from_private_mut(
-      &private_key_in, &libcrux_key_pair);
+    libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768KeyPairUnpacked
+        libcrux_key_pair;
+    libcrux_ml_kem_mlkem768_portable_unpacked_key_pair_from_private_mut(
+        &private_key_in, &libcrux_key_pair);
 
-  // Check that the private key values are in the correct domain.
-  // This is not a check from the spec, so we do it here on top.
-  bool ok = true;
-  for (size_t i = 0; i < 3; i++) {
-    for (size_t j = 0; j < 16; j++) {
-      for (size_t k = 0; k < 16; k++) {
-        ok &= libcrux_key_pair.private_key.ind_cpa_private_key.secret_as_ntt[i]
+    // Check that the private key values are in the correct domain.
+    // This is not a check from the spec, so we do it here on top.
+    bool ok = true;
+    for (size_t i = 0; i < 3; i++) {
+      for (size_t j = 0; j < 16; j++) {
+        for (size_t k = 0; k < 16; k++) {
+          ok &=
+              libcrux_key_pair.private_key.ind_cpa_private_key.secret_as_ntt[i]
                   .coefficients[j]
                   .elements[k] <= 3329;
+        }
       }
     }
-  }
-  if (!constant_time_declassify_int(ok)) {
-    return 0;
-  }
+    if (!constant_time_declassify_int(ok)) {
+      return 0;
+    }
 
-  // Copy the key out.
-  MLKEM768_libcrux_private_key_out(priv, &libcrux_key_pair);
+    // Copy the key out.
+    MLKEM768_libcrux_private_key_out(priv, &libcrux_key_pair);
 
-  return 1;
+    return 1;
+  }
 #endif
 
   CBS s_bytes;
@@ -1023,7 +1026,7 @@ int mlkem_parse_private_key(struct private_key<RANK> *priv, CBS *in) {
 template <int RANK>
 int mlkem_marshal_private_key(CBB *out, const struct private_key<RANK> *priv) {
 #if !defined(OPENSSL_SMALL)
-  if (RANK == RANK768) {
+  if (RANK == 3) {  // MLKEM768 only for now.
     libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768KeyPairUnpacked
         libcrux_priv;
     MLKEM768_libcrux_private_key(&libcrux_priv, priv);
