@@ -927,8 +927,7 @@ int mlkem_parse_public_key(struct public_key<RANK> *pub, CBS *in) {
   if (RANK == 3) {  // MLKEM768 only for now.
     // Copy the bytes into the libcrux serialized key type.
     libcrux_ml_kem_types_MlKemPublicKey_30 serialized;
-    if (!CBS_copy_bytes(in, (uint8_t *)serialized.value,
-                        BCM_MLKEM768_PUBLIC_KEY_BYTES) ||
+    if (!CBS_copy_bytes(in, serialized.value, BCM_MLKEM768_PUBLIC_KEY_BYTES) ||
         CBS_len(in) != 0) {
       // Couldn't read the necessary bytes.
       return 0;
@@ -1491,16 +1490,24 @@ bcm_infallible BCM_mlkem768_public_from_private(
 #if !defined(OPENSSL_SMALL)
 #if defined(OPENSSL_X86_64)
   if (CRYPTO_is_AVX2_capable()) {
+    libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768KeyPairUnpacked
+        libcrux_key_pair;
+    OPENSSL_memcpy(&libcrux_key_pair, private_key,
+                   sizeof(struct BCM_mlkem768_private_key));
+
     libcrux_ml_kem_mlkem768_avx2_unpacked_public_key(
-        (libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768KeyPairUnpacked *)
-            private_key,
+        &libcrux_key_pair,
         (libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked *)
             out_public_key);
   }
 #endif  // defined(OPENSSL_X86_64)
+  libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768KeyPairUnpacked
+      libcrux_key_pair;
+  OPENSSL_memcpy(&libcrux_key_pair, private_key,
+                 sizeof(struct BCM_mlkem768_private_key));
+
   libcrux_ml_kem_mlkem768_portable_unpacked_public_key(
-      (libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768KeyPairUnpacked *)
-          private_key,
+      &libcrux_key_pair,
       (libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768PublicKeyUnpacked *)
           out_public_key);
 #endif  // !defined(OPENSSL_SMALL)
@@ -1606,10 +1613,12 @@ bcm_status BCM_mlkem768_marshal_public_key(
 #if defined(OPENSSL_X86_64)
   if (CRYPTO_is_AVX2_capable()) {
     libcrux_ml_kem_types_MlKemPublicKey_30 serialized;
-    libcrux_ml_kem_mlkem768_avx2_unpacked_serialized_public_key(
-        (libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked *)
-            public_key,
-        &serialized);
+    libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked libcrux_pk;
+    OPENSSL_memcpy(&libcrux_pk, public_key,
+                   sizeof(struct BCM_mlkem768_public_key));
+
+    libcrux_ml_kem_mlkem768_avx2_unpacked_serialized_public_key(&libcrux_pk,
+                                                                &serialized);
 
     if (!CBB_add_bytes(out, serialized.value, sizeof(serialized.value))) {
       return bcm_status::failure;
@@ -1619,10 +1628,13 @@ bcm_status BCM_mlkem768_marshal_public_key(
   }
 #endif  // defined(OPENSSL_X86_64)
   libcrux_ml_kem_types_MlKemPublicKey_30 serialized;
-  libcrux_ml_kem_mlkem768_portable_unpacked_serialized_public_key(
-      (libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768PublicKeyUnpacked *)
-          public_key,
-      &serialized);
+  libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768PublicKeyUnpacked
+      libcrux_pk;
+  OPENSSL_memcpy(&libcrux_pk, public_key,
+                 sizeof(struct BCM_mlkem768_public_key));
+
+  libcrux_ml_kem_mlkem768_portable_unpacked_serialized_public_key(&libcrux_pk,
+                                                                  &serialized);
 
   if (!CBB_add_bytes(out, serialized.value, sizeof(serialized.value))) {
     return bcm_status::failure;
@@ -1935,7 +1947,7 @@ int MLKEM768_libcrux_parse_private_key_avx2(
   assert(RANK == RANK768);
 
   libcrux_ml_kem_types_MlKemPrivateKey_d9 private_key_in;
-  if (!CBS_copy_bytes(in, (uint8_t *)&private_key_in.value,
+  if (!CBS_copy_bytes(in, private_key_in.value,
                       BCM_MLKEM768_PRIVATE_KEY_BYTES) ||
       CBS_len(in) != 0) {
     // Couldn't read the necessary bytes.
