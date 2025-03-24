@@ -1718,7 +1718,7 @@ int boringssl_self_test_mlkem() {
          mlkem::fips::decap_self_test();
 }
 
-// Libcrux key conversion functions
+// Libcrux key conversion functions.
 #if !defined(OPENSSL_SMALL)
 
 template <int RANK>
@@ -1940,6 +1940,7 @@ void MLKEM768_libcrux_private_key_avx2(
                                    &private_key->pub);
 }
 
+// Parse and validate the private key from in and store it into priv.
 template <int RANK>
 KRML_ATTRIBUTE_TARGET("avx2")
 int MLKEM768_libcrux_parse_private_key_avx2(
@@ -1954,7 +1955,7 @@ int MLKEM768_libcrux_parse_private_key_avx2(
     return 0;
   }
 
-  // Validate the private key
+  // Validate the private key.
   if (!libcrux_ml_kem_mlkem768_avx2_validate_private_key_only(
           &private_key_in)) {
     return 0;
