@@ -34,9 +34,9 @@
 
 #if defined(OPENSSL_X86_64)
 #include "../../../third_party/libcrux/libcrux_mlkem768_avx2.h"
-#endif
+#endif  // defined(OPENSSL_X86_64)
 
-#endif
+#endif  // !defined(OPENSSL_SMALL)
 
 namespace mlkem {
 namespace {
@@ -968,7 +968,7 @@ int mlkem_parse_public_key(struct public_key<RANK> *pub, CBS *in) {
     MLKEM768_libcrux_public_key_out(pub, &libcrux_public_key);
     return 1;
   }
-#endif
+#endif  // !defined(OPENSSL_SMALL)
 
   CBS orig_in = *in;
   if (!mlkem_parse_public_key_no_hash(pub, in) ||  //
@@ -1030,7 +1030,7 @@ int mlkem_parse_private_key(struct private_key<RANK> *priv, CBS *in) {
 
     return 1;
   }
-#endif
+#endif  // !defined(OPENSSL_SMALL)
 
   CBS s_bytes;
   if (!CBS_get_bytes(in, &s_bytes, encoded_vector_size(RANK)) ||
@@ -1079,7 +1079,7 @@ int mlkem_marshal_private_key(CBB *out, const struct private_key<RANK> *priv) {
     }
     return 1;
   }
-#endif
+#endif  // !defined(OPENSSL_SMALL)
 
   uint8_t *s_output;
   if (!CBB_add_space(out, &s_output, encoded_vector_size(RANK))) {
