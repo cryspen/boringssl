@@ -925,6 +925,10 @@ int mlkem_parse_public_key(struct public_key<RANK> *pub, CBS *in) {
 #if !defined(OPENSSL_SMALL)
   // This functions isn't only parsing, but also validating.
   if (RANK == 3) {  // MLKEM768 only for now.
+    static_assert(BCM_MLKEM768_PUBLIC_KEY_BYTES ==
+                      sizeof(libcrux_ml_kem_types_MlKemPublicKey_30),
+                  "");
+
     // Copy the bytes into the libcrux serialized key type.
     libcrux_ml_kem_types_MlKemPublicKey_30 serialized;
     if (!CBS_copy_bytes(in, serialized.value, BCM_MLKEM768_PUBLIC_KEY_BYTES) ||
@@ -1259,7 +1263,6 @@ static int encap_self_test() {
 }
 
 static int decap_self_test() {
-  // printf(" <<< decap self test\n");
   CBS cbs;
   CBS_init(&cbs, kExpectedPrivateKeyBytes, sizeof(kExpectedPrivateKeyBytes));
   private_key<RANK768> priv;
