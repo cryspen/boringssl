@@ -666,7 +666,12 @@ boringssl_crypto_internal_headers := \
   third_party/fiat/p256_field.c.inc \
   third_party/fiat/p256_field_32.br.c.inc \
   third_party/fiat/p256_field_64.br.c.inc \
-  third_party/fiat/p256_point.br.c.inc
+  third_party/fiat/p256_point.br.c.inc \
+  third_party/libcrux/eurydice_glue.h \
+  third_party/libcrux/intrinsics/libcrux_intrinsics_avx2.h \
+  third_party/libcrux/karamel/target.h \
+  third_party/libcrux/libcrux_mlkem768_avx2.h \
+  third_party/libcrux/libcrux_mlkem768_portable.h
 
 boringssl_crypto_sources_asm := \
   crypto/curve25519/asm/x25519-asm-arm.S \

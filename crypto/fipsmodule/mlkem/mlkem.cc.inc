@@ -29,6 +29,10 @@
 #include "../delocate.h"
 #include "../keccak/internal.h"
 
+#include "../../../third_party/libcrux/libcrux_mlkem768_portable.h"
+#if defined(OPENSSL_X86_64)
+#include "../../../third_party/libcrux/libcrux_mlkem768_avx2.h"
+#endif  // defined(OPENSSL_X86_64)
 
 namespace mlkem {
 namespace {
@@ -490,6 +494,45 @@ void scalar_encode(uint8_t *out, const scalar *s, int bits) {
   }
 }
 
+// Avx2 optimized serialize 4 for a scalar with libcrux.
+KRML_ATTRIBUTE_TARGET("avx2")
+void libcrux_ml_kem_serialize_4_avx2(scalar *v, uint8_t *serialized) {
+  static_assert(16 * sizeof(__m256i) == sizeof(mlkem::scalar));
+  libcrux_ml_kem_polynomial_PolynomialRingElement_f6 avx2_re;
+  OPENSSL_memcpy(&avx2_re, v,
+                 sizeof(libcrux_ml_kem_polynomial_PolynomialRingElement_1d));
+
+  uint8_t bytes[8];
+  for (size_t i = 0; i < 16; i++) {
+    libcrux_ml_kem_vector_avx2_serialize_4_9a(avx2_re.coefficients[i], bytes);
+    OPENSSL_memcpy(&serialized[8 * i], bytes, 8);
+  }
+}
+
+// Serialize 4 for a scalar with libcrux.
+// This is either portable, or avx2 optimized.
+void libcrux_ml_kem_serialize_4(scalar *v, uint8_t *serialized) {
+#if defined(OPENSSL_X86_64)
+  if (CRYPTO_is_AVX2_capable()) {
+    libcrux_ml_kem_serialize_4_avx2(v, serialized);
+    return;
+  }
+#endif  // defined(OPENSSL_X86_64)
+
+  static_assert(sizeof(libcrux_ml_kem_polynomial_PolynomialRingElement_1d) ==
+                sizeof(mlkem::scalar));
+
+  libcrux_ml_kem_polynomial_PolynomialRingElement_1d re;
+  OPENSSL_memcpy(&re, v,
+                 sizeof(libcrux_ml_kem_polynomial_PolynomialRingElement_1d));
+
+  uint8_t bytes[8];
+  for (size_t i = 0; i < 16; i++) {
+    libcrux_ml_kem_vector_portable_serialize_4_2c(re.coefficients[i], bytes);
+    OPENSSL_memcpy(&serialized[8 * i], bytes, 8);
+  }
+}
+
 // scalar_encode_1 is |scalar_encode| specialised for |bits| == 1.
 void scalar_encode_1(uint8_t out[32], const scalar *s) {
   for (int i = 0; i < DEGREE; i += 8) {
@@ -503,8 +546,8 @@ void scalar_encode_1(uint8_t out[32], const scalar *s) {
 }
 
 // Encodes an entire vector into 32*|RANK|*|bits| bytes. Note that since 256
-// (DEGREE) is divisible by 8, the individual vector entries will always fill a
-// whole number of bytes, so we do not need to worry about bit packing here.
+// (DEGREE) is divisible by 8, the individual vector entries will always fill
+// a whole number of bytes, so we do not need to worry about bit packing here.
 template <int RANK>
 void vector_encode(uint8_t *out, const vector<RANK> *a, int bits) {
   for (int i = 0; i < RANK; i++) {
@@ -579,8 +622,8 @@ static int vector_decode(vector<RANK> *out, const uint8_t *in, int bits) {
   return 1;
 }
 
-// Compresses (lossily) an input |x| mod 3329 into |bits| many bits by grouping
-// numbers close to each other together. The formula used is
+// Compresses (lossily) an input |x| mod 3329 into |bits| many bits by
+// grouping numbers close to each other together. The formula used is
 // round(2^|bits|/kPrime*x) mod 2^|bits|.
 // Uses Barrett reduction to achieve constant time. Since we need both the
 // remainder (for rounding) and the quotient (as the result), we cannot use
@@ -611,10 +654,10 @@ uint16_t decompress(uint16_t x, int bits) {
   uint32_t remainder = product & (power - 1);
   // This is |product| / power, since |power| is a power of 2.
   uint32_t lower = product >> bits;
-  // The rounding logic works since the first half of numbers mod |power| have a
-  // 0 as first bit, and the second half has a 1 as first bit, since |power| is
-  // a power of 2. As a 12 bit number, |remainder| is always positive, so we
-  // will shift in 0s for a right shift.
+  // The rounding logic works since the first half of numbers mod |power| have
+  // a 0 as first bit, and the second half has a 1 as first bit, since |power|
+  // is a power of 2. As a 12 bit number, |remainder| is always positive, so
+  // we will shift in 0s for a right shift.
   return lower + (remainder >> (bits - 1));
 }
 
@@ -743,9 +786,9 @@ void mlkem_generate_key_external_seed(
 }
 
 // Encrypts a message with given randomness to
-// the ciphertext in |out|. Without applying the Fujisaki-Okamoto transform this
-// would not result in a CCA secure scheme, since lattice schemes are vulnerable
-// to decryption failure oracles.
+// the ciphertext in |out|. Without applying the Fujisaki-Okamoto transform
+// this would not result in a CCA secure scheme, since lattice schemes are
+// vulnerable to decryption failure oracles.
 template <int RANK>
 void encrypt_cpa(uint8_t *out, const struct mlkem::public_key<RANK> *pub,
                  const uint8_t message[32], const uint8_t randomness[32]) {
@@ -778,7 +821,11 @@ void encrypt_cpa(uint8_t *out, const struct mlkem::public_key<RANK> *pub,
   vector_compress(&u, du);
   vector_encode(out, &u, du);
   scalar_compress(&v, dv);
-  scalar_encode(out + mlkem::compressed_vector_size(RANK), &v, dv);
+  if (RANK == 3) {
+    libcrux_ml_kem_serialize_4(&v, out + mlkem::compressed_vector_size(RANK));
+  } else {
+    scalar_encode(out + mlkem::compressed_vector_size(RANK), &v, dv);
+  }
 }
 
 // See section 6.3
