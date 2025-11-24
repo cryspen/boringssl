@@ -1245,7 +1245,7 @@ void mlkem_encap_external_entropy_no_self_test(
   // The ciphertext is public.
   CONSTTIME_DECLASSIFY(out_ciphertext, mlkem::ciphertext_size(RANK));
   static_assert(MLKEM_SHARED_SECRET_BYTES == 32);
-  memcpy(out_shared_secret, key_and_randomness, 32);
+  OPENSSL_memcpy(out_shared_secret, key_and_randomness, 32);
 }
 
 template <int RANK>
