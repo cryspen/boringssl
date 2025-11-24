@@ -158,7 +158,7 @@ typedef struct Eurydice_dst_ref_9a_s {
 // The following functions convert an array into a slice.
 
 #define Eurydice_array_to_subslice(_arraylen, x, r, t, _0, _1) \
-   EURYDICE_SLICE((t *)x, r.start, r.end)
+  EURYDICE_SLICE((t *)x, r.start, r.end)
 
 // Same as above, variant for when start and end are statically known
 #define Eurydice_array_to_subslice2(x, start, end, t) \
@@ -184,7 +184,7 @@ typedef struct Eurydice_dst_ref_9a_s {
   Eurydice_slice { ptr_, len_ }
 
 #define core_array__core__clone__Clone_for__Array_T__N___clone( \
-    len, src, elem_type, _ret_t)                           \
+    len, src, elem_type, _ret_t)                                \
   (*(src))
 #define TryFromSliceError uint8_t
 #define core_array_TryFromSliceError uint8_t
@@ -206,14 +206,14 @@ typedef struct Eurydice_dst_ref_9a_s {
 
 // Rust `split_at` on arrays and slices to generate two slices.
 #define Eurydice_slice_split_at(slice, mid, element_type, ret_t)        \
-  ret_t {                                                \
+  ret_t {                                                               \
     EURYDICE_CFIELD(.fst =){EURYDICE_CFIELD(.ptr =)((slice).ptr),       \
                             EURYDICE_CFIELD(.meta =) mid},              \
         EURYDICE_CFIELD(.snd =) {                                       \
       EURYDICE_CFIELD(.ptr =)                                           \
       ((slice).ptr + mid), EURYDICE_CFIELD(.meta =)((slice).meta - mid) \
     }                                                                   \
-   }
+  }
 
 #define core_array___Array_T__N___as_slice(len_, ptr_, t, _ret_t) \
   Eurydice_slice { ptr_, len_ }

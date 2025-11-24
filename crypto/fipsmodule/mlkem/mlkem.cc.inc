@@ -721,9 +721,8 @@ void mlkem_generate_key_external_seed_no_self_test(
         return;
       }
 
-      auto *libcrux_public_key =
-          reinterpret_cast<Eurydice_arr_74 *>(
-              OPENSSL_malloc(sizeof(Eurydice_arr_74)));
+      auto *libcrux_public_key = reinterpret_cast<Eurydice_arr_74 *>(
+          OPENSSL_malloc(sizeof(Eurydice_arr_74)));
 
       if (!libcrux_public_key) {
         OPENSSL_free(key_pair_memory);
@@ -761,9 +760,8 @@ void mlkem_generate_key_external_seed_no_self_test(
       return;
     }
 
-    auto *libcrux_public_key =
-        reinterpret_cast<Eurydice_arr_74 *>(
-            OPENSSL_malloc(sizeof(Eurydice_arr_74)));
+    auto *libcrux_public_key = reinterpret_cast<Eurydice_arr_74 *>(
+        OPENSSL_malloc(sizeof(Eurydice_arr_74)));
 
     if (!libcrux_public_key) {
       OPENSSL_free(libcrux_key_pair);
@@ -772,7 +770,8 @@ void mlkem_generate_key_external_seed_no_self_test(
 
     // Copy priv into the libcrux key type.
     libcrux_ml_kem_mlkem768_portable_unpacked_generate_key_pair_mut(
-        *reinterpret_cast<Eurydice_arr_06 *>(const_cast<uint8_t *>(seed)), libcrux_key_pair);
+        *reinterpret_cast<Eurydice_arr_06 *>(const_cast<uint8_t *>(seed)),
+        libcrux_key_pair);
 
     // Copy all elements of priv out individually.
     MLKEM768_libcrux_private_key_out(priv, libcrux_key_pair);
@@ -889,12 +888,12 @@ void mlkem_decap_no_self_test(
 
       // Decapsulate.
       Eurydice_arr_600 libcrux_shared_secret =
-        libcrux_ml_kem_mlkem768_avx2_unpacked_decapsulate(
-            &libcrux_key,
-            (Eurydice_arr_2c *)ciphertext);
+          libcrux_ml_kem_mlkem768_avx2_unpacked_decapsulate(
+              &libcrux_key, (Eurydice_arr_2c *)ciphertext);
 
       static_assert(MLKEM_SHARED_SECRET_BYTES == sizeof(Eurydice_arr_600));
-      OPENSSL_memcpy(out_shared_secret, &libcrux_shared_secret.data, MLKEM_SHARED_SECRET_BYTES);
+      OPENSSL_memcpy(out_shared_secret, &libcrux_shared_secret.data,
+                     MLKEM_SHARED_SECRET_BYTES);
 
       return;
     }
@@ -907,10 +906,11 @@ void mlkem_decap_no_self_test(
     // Decapsulate.
     Eurydice_arr_600 libcrux_shared_secret =
         libcrux_ml_kem_mlkem768_portable_unpacked_decapsulate(
-          &libcrux_key, (Eurydice_arr_2c *)ciphertext);
+            &libcrux_key, (Eurydice_arr_2c *)ciphertext);
 
     static_assert(MLKEM_SHARED_SECRET_BYTES == sizeof(Eurydice_arr_600));
-    OPENSSL_memcpy(out_shared_secret, &libcrux_shared_secret.data, MLKEM_SHARED_SECRET_BYTES);
+    OPENSSL_memcpy(out_shared_secret, &libcrux_shared_secret.data,
+                   MLKEM_SHARED_SECRET_BYTES);
 
     return;
   }
@@ -965,9 +965,7 @@ int mlkem_parse_public_key(public_key<RANK> *pub, CBS *in) {
 #if !defined(OPENSSL_SMALL)
   // This functions isn't only parsing, but also validating.
   if (RANK == 3) {  // MLKEM768 only for now.
-    static_assert(MLKEM768_PUBLIC_KEY_BYTES ==
-                      sizeof(Eurydice_arr_74),
-                  "");
+    static_assert(MLKEM768_PUBLIC_KEY_BYTES == sizeof(Eurydice_arr_74), "");
 
     // Copy the bytes into the libcrux serialized key type.
     Eurydice_arr_74 serialized;
@@ -1058,10 +1056,9 @@ int mlkem_parse_private_key(private_key<RANK> *priv, CBS *in) {
     for (size_t i = 0; i < 3; i++) {
       for (size_t j = 0; j < 16; j++) {
         for (size_t k = 0; k < 16; k++) {
-          ok &=
-              libcrux_key_pair.private_key.ind_cpa_private_key.data[i]
-                  .data[j]
-                  .data[k] <= 3329;
+          ok &= libcrux_key_pair.private_key.ind_cpa_private_key.data[i]
+                    .data[j]
+                    .data[k] <= 3329;
         }
       }
     }
@@ -1206,7 +1203,8 @@ void mlkem_encap_external_entropy_no_self_test(
 
       // Encapsulate.
       tuple_56 ct_zz = libcrux_ml_kem_mlkem768_avx2_unpacked_encapsulate(
-        &libcrux_public_key, *reinterpret_cast<Eurydice_arr_600 *>(const_cast<uint8_t *> (entropy)));
+          &libcrux_public_key, *reinterpret_cast<Eurydice_arr_600 *>(
+                                   const_cast<uint8_t *>(entropy)));
 
       // Copy the ciphertext and shared secret out.
       OPENSSL_memcpy(out_ciphertext, ct_zz.fst.data,
@@ -1224,12 +1222,14 @@ void mlkem_encap_external_entropy_no_self_test(
 
     // Copy the ciphertext and shared secret out.
     tuple_56 ct_zz = libcrux_ml_kem_mlkem768_portable_unpacked_encapsulate(
-        &libcrux_public_key, *reinterpret_cast<Eurydice_arr_600 *>(const_cast<uint8_t *> (entropy)));
+        &libcrux_public_key,
+        *reinterpret_cast<Eurydice_arr_600 *>(const_cast<uint8_t *>(entropy)));
 
     // Copy the ciphertext and shared secret out.
     OPENSSL_memcpy(out_ciphertext, ct_zz.fst.data,
                    mlkem::ciphertext_size(RANK));
-    OPENSSL_memcpy(out_shared_secret, ct_zz.snd.data, MLKEM_SHARED_SECRET_BYTES);
+    OPENSSL_memcpy(out_shared_secret, ct_zz.snd.data,
+                   MLKEM_SHARED_SECRET_BYTES);
     CONSTTIME_DECLASSIFY(out_ciphertext, mlkem::ciphertext_size(RANK));
     return;
   }
@@ -1548,8 +1548,7 @@ bcm_infallible BCM_mlkem768_public_from_private(
 #endif  // defined(OPENSSL_X86_64)
   libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768KeyPairUnpacked
       libcrux_key_pair;
-  OPENSSL_memcpy(&libcrux_key_pair, private_key,
-                 sizeof(MLKEM768_private_key));
+  OPENSSL_memcpy(&libcrux_key_pair, private_key, sizeof(MLKEM768_private_key));
 
   libcrux_ml_kem_mlkem768_portable_unpacked_public_key(
       &libcrux_key_pair,
@@ -1659,8 +1658,7 @@ bcm_status BCM_mlkem768_marshal_public_key(
   if (CRYPTO_is_AVX2_capable()) {
     Eurydice_arr_74 serialized;
     libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked libcrux_pk;
-    OPENSSL_memcpy(&libcrux_pk, public_key,
-                   sizeof(MLKEM768_public_key));
+    OPENSSL_memcpy(&libcrux_pk, public_key, sizeof(MLKEM768_public_key));
 
     libcrux_ml_kem_mlkem768_avx2_unpacked_serialized_public_key(&libcrux_pk,
                                                                 &serialized);
@@ -1675,8 +1673,7 @@ bcm_status BCM_mlkem768_marshal_public_key(
   Eurydice_arr_74 serialized;
   libcrux_ml_kem_mlkem768_portable_unpacked_MlKem768PublicKeyUnpacked
       libcrux_pk;
-  OPENSSL_memcpy(&libcrux_pk, public_key,
-                 sizeof(MLKEM768_public_key));
+  OPENSSL_memcpy(&libcrux_pk, public_key, sizeof(MLKEM768_public_key));
 
   libcrux_ml_kem_mlkem768_portable_unpacked_serialized_public_key(&libcrux_pk,
                                                                   &serialized);
@@ -1773,13 +1770,14 @@ void MLKEM768_libcrux_public_key(
     const mlkem::public_key<RANK> *public_key) {
   assert(RANK == RANK768);
 
-  OPENSSL_memcpy(out_public_key->public_key_hash.data, public_key->public_key_hash,
+  OPENSSL_memcpy(out_public_key->public_key_hash.data,
+                 public_key->public_key_hash,
                  sizeof(public_key->public_key_hash));
 
-  OPENSSL_memcpy(out_public_key->ind_cpa_public_key.t_as_ntt.data, public_key->t.v,
-                 sizeof(public_key->t));
-  OPENSSL_memcpy(out_public_key->ind_cpa_public_key.seed_for_A.data, public_key->rho,
-                 sizeof(public_key->rho));
+  OPENSSL_memcpy(out_public_key->ind_cpa_public_key.t_as_ntt.data,
+                 public_key->t.v, sizeof(public_key->t));
+  OPENSSL_memcpy(out_public_key->ind_cpa_public_key.seed_for_A.data,
+                 public_key->rho, sizeof(public_key->rho));
   OPENSSL_memcpy(out_public_key->ind_cpa_public_key.A.data, public_key->m.v,
                  sizeof(public_key->m));
 }
@@ -1791,12 +1789,15 @@ void MLKEM768_libcrux_public_key_out(
         *public_key) {
   assert(RANK == RANK768);
 
-  OPENSSL_memcpy(out_public_key->public_key_hash, public_key->public_key_hash.data,
+  OPENSSL_memcpy(out_public_key->public_key_hash,
+                 public_key->public_key_hash.data,
                  sizeof(out_public_key->public_key_hash));
 
-  OPENSSL_memcpy(out_public_key->t.v, public_key->ind_cpa_public_key.t_as_ntt.data,
+  OPENSSL_memcpy(out_public_key->t.v,
+                 public_key->ind_cpa_public_key.t_as_ntt.data,
                  sizeof(out_public_key->t));
-  OPENSSL_memcpy(out_public_key->rho, public_key->ind_cpa_public_key.seed_for_A.data,
+  OPENSSL_memcpy(out_public_key->rho,
+                 public_key->ind_cpa_public_key.seed_for_A.data,
                  sizeof(out_public_key->rho));
   OPENSSL_memcpy(out_public_key->m.v, public_key->ind_cpa_public_key.A.data,
                  sizeof(out_public_key->m));
@@ -1822,10 +1823,9 @@ void MLKEM768_libcrux_private_key_out(
   static_assert(sizeof(out_key_pair->pub.m) ==
                     sizeof(key_pair->public_key.ind_cpa_public_key.A) ||
                 RANK != RANK768);
-  static_assert(
-      sizeof(out_key_pair->s) ==
-          sizeof(key_pair->private_key.ind_cpa_private_key.data) ||
-      RANK != RANK768);
+  static_assert(sizeof(out_key_pair->s) ==
+                    sizeof(key_pair->private_key.ind_cpa_private_key.data) ||
+                RANK != RANK768);
   static_assert(sizeof(out_key_pair->fo_failure_secret) ==
                     sizeof(key_pair->private_key.implicit_rejection_value) ||
                 RANK != RANK768);
@@ -1893,10 +1893,9 @@ void MLKEM768_libcrux_private_key_out_avx2(
   static_assert(sizeof(out_key_pair->pub.m) ==
                     sizeof(key_pair->public_key.ind_cpa_public_key.A) ||
                 RANK != RANK768);
-  static_assert(
-      sizeof(out_key_pair->s) ==
-          sizeof(key_pair->private_key.ind_cpa_private_key.data) ||
-      RANK != RANK768);
+  static_assert(sizeof(out_key_pair->s) ==
+                    sizeof(key_pair->private_key.ind_cpa_private_key.data) ||
+                RANK != RANK768);
   static_assert(sizeof(out_key_pair->fo_failure_secret) ==
                     sizeof(key_pair->private_key.implicit_rejection_value) ||
                 RANK != RANK768);
@@ -1935,14 +1934,15 @@ void MLKEM768_libcrux_public_key_avx2(
               libcrux_ml_kem_mlkem768_avx2_unpacked_MlKem768PublicKeyUnpacked),
       "");
 
-  OPENSSL_memcpy(out_public_key->public_key_hash.data, public_key->public_key_hash,
+  OPENSSL_memcpy(out_public_key->public_key_hash.data,
+                 public_key->public_key_hash,
                  sizeof(public_key->public_key_hash));
   OPENSSL_memcpy(out_public_key->ind_cpa_public_key.A.data, &public_key->m,
                  sizeof(public_key->m));
   OPENSSL_memcpy(out_public_key->ind_cpa_public_key.seed_for_A.data,
                  &public_key->rho, sizeof(public_key->rho));
-  OPENSSL_memcpy(out_public_key->ind_cpa_public_key.t_as_ntt.data, &public_key->t,
-                 sizeof(public_key->t));
+  OPENSSL_memcpy(out_public_key->ind_cpa_public_key.t_as_ntt.data,
+                 &public_key->t, sizeof(public_key->t));
 }
 
 template <int RANK>
@@ -1952,12 +1952,15 @@ void MLKEM768_libcrux_public_key_out_avx2(
         *public_key) {
   assert(RANK == RANK768);
 
-  OPENSSL_memcpy(out_public_key->public_key_hash, public_key->public_key_hash.data,
+  OPENSSL_memcpy(out_public_key->public_key_hash,
+                 public_key->public_key_hash.data,
                  sizeof(out_public_key->public_key_hash));
 
-  OPENSSL_memcpy(out_public_key->t.v, public_key->ind_cpa_public_key.t_as_ntt.data,
+  OPENSSL_memcpy(out_public_key->t.v,
+                 public_key->ind_cpa_public_key.t_as_ntt.data,
                  sizeof(out_public_key->t));
-  OPENSSL_memcpy(out_public_key->rho, public_key->ind_cpa_public_key.seed_for_A.data,
+  OPENSSL_memcpy(out_public_key->rho,
+                 public_key->ind_cpa_public_key.seed_for_A.data,
                  sizeof(out_public_key->rho));
   OPENSSL_memcpy(out_public_key->m.v, public_key->ind_cpa_public_key.A.data,
                  sizeof(out_public_key->m));
@@ -1988,8 +1991,8 @@ void MLKEM768_libcrux_private_key_avx2(
 // Parse and validate the private key from in and store it into priv.
 template <int RANK>
 KRML_ATTRIBUTE_TARGET("avx2")
-int MLKEM768_libcrux_parse_private_key_avx2(
-    mlkem::private_key<RANK> *priv, CBS *in) {
+int MLKEM768_libcrux_parse_private_key_avx2(mlkem::private_key<RANK> *priv,
+                                            CBS *in) {
   assert(RANK == RANK768);
 
   Eurydice_arr_ea private_key_in;
@@ -2019,8 +2022,7 @@ int MLKEM768_libcrux_parse_private_key_avx2(
       uint16_t element[16] = {0};
       _mm256_storeu_si256(
           (__m256i *)element,
-          libcrux_key_pair.private_key.ind_cpa_private_key.data[i]
-              .data[j]);
+          libcrux_key_pair.private_key.ind_cpa_private_key.data[i].data[j]);
       for (size_t k = 0; k < 16; k++) {
         ok &= element[i] <= 3329;
       }
